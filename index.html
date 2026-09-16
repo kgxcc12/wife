@@ -85,17 +85,19 @@
   }
 
   .datebar button.nav {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border-radius: 10px;
     border: none;
     background: var(--surface-soft);
     color: var(--ink);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 800;
     cursor: pointer;
+    flex-shrink: 0;
   }
   .datebar button.nav:hover { background: var(--yellow); }
+  .datebar button.nav:active { transform: scale(0.94); }
 
   .datebar .datelabel {
     flex: 1;
@@ -117,12 +119,18 @@
     background: var(--surface-soft);
     color: var(--ink-soft);
     font-weight: 800;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     border-radius: 10px;
-    padding: 8px 10px;
+    padding: 10px 12px;
+    height: 44px;
     cursor: pointer;
+    flex-shrink: 0;
   }
   .datebar .today-btn:hover { color: var(--ink); background: var(--yellow); }
+
+  @media (max-width: 360px) {
+    .datebar .today-btn { display: none; }
+  }
 
   /* ---------- card shell ---------- */
   .card {
@@ -206,6 +214,23 @@
     gap: 8px;
   }
 
+  .compare-card .ccard-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .compare-card .ccard-title .icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--surface-soft);
+  }
+
   .compare-card h3 {
     margin: 0;
     font-size: 1rem;
@@ -250,6 +275,7 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
   }
 
   .time-field label {
@@ -262,14 +288,15 @@
 
   .time-field input[type="time"] {
     font-family: 'Nunito', sans-serif;
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--ink);
     border: 1px solid var(--border);
     background: var(--surface-soft);
     border-radius: 10px;
-    padding: 7px 8px;
+    padding: 10px 8px;
     width: 100%;
+    min-height: 44px;
   }
 
   .compare-card .duration-line {
@@ -277,6 +304,55 @@
     font-weight: 700;
     color: var(--ink-soft);
   }
+
+  /* ---------- main sleep segments ---------- */
+  .segments {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .segment-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .segment-remove {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: none;
+    background: var(--surface-soft);
+    color: var(--critical);
+    font-size: 1.2rem;
+    font-weight: 800;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .segment-row:only-child .segment-remove { visibility: hidden; }
+  .segment-remove:hover { background: rgba(214,80,63,0.15); }
+  .segment-remove:active { transform: scale(0.94); }
+
+  .add-segment-btn {
+    border: 1.5px dashed var(--border);
+    background: transparent;
+    color: var(--ink-soft);
+    font-weight: 800;
+    font-size: 0.85rem;
+    border-radius: 12px;
+    padding: 10px;
+    min-height: 44px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .add-segment-btn:hover {
+    border-color: var(--yellow-deep);
+    color: var(--ink);
+    background: var(--surface-soft);
+  }
+  .add-segment-btn:active { transform: scale(0.99); }
 
   /* ---------- score ---------- */
   .score-card {
@@ -330,7 +406,7 @@
     min-height: 92px;
     resize: vertical;
     font-family: 'Nunito', sans-serif;
-    font-size: 0.92rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--ink);
     border: 1px solid var(--border);
@@ -362,13 +438,21 @@
     background: var(--red);
     color: #fff;
     font-weight: 800;
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     border-radius: 12px;
-    padding: 10px 18px;
+    padding: 12px 20px;
+    min-height: 44px;
     cursor: pointer;
     box-shadow: 0 3px 10px rgba(228,87,46,0.35);
   }
   .save-btn:hover { background: #c94a25; }
+  .save-btn:active { transform: scale(0.98); }
+
+  @media (max-width: 380px) {
+    .header { padding: 16px; gap: 10px; }
+    .header h1 { font-size: 1.28rem; }
+    .mascot svg { width: 48px; height: 48px; }
+  }
 
   .footnote {
     text-align: center;
@@ -425,30 +509,29 @@
 
     <div class="compare-card">
       <div class="ccard-head">
-        <h3>Main sleep</h3>
+        <div class="ccard-title">
+          <span class="icon">🌙</span>
+          <h3>Main sleep</h3>
+        </div>
         <span class="delta-pill" id="mainDelta">--</span>
       </div>
       <div class="plan-row">
         <span>Plan</span>
         <span id="mainPlanLabel">3:30 AM → 10:30 AM</span>
       </div>
-      <div class="actual-row">
-        <div class="time-field">
-          <label for="mainStart">Bedtime</label>
-          <input type="time" id="mainStart">
-        </div>
-        <div class="time-field">
-          <label for="mainEnd">Wake time</label>
-          <input type="time" id="mainEnd">
-        </div>
-      </div>
+      <div class="note">Add every stretch she slept in this window</div>
+      <div class="segments" id="mainSegments"></div>
+      <button class="add-segment-btn" id="addSegment" type="button">+ Add sleep time</button>
       <div class="bar-track mini"><div class="bar-fill" id="mainBar" style="width:0%"></div></div>
       <div class="duration-line" id="mainDuration">Log times to see duration</div>
     </div>
 
     <div class="compare-card">
       <div class="ccard-head">
-        <h3>Power nap</h3>
+        <div class="ccard-title">
+          <span class="icon">☕</span>
+          <h3>Power nap</h3>
+        </div>
         <span class="delta-pill" id="napDelta">--</span>
       </div>
       <div class="plan-row">
@@ -513,7 +596,7 @@
   };
 
   function emptyDay() {
-    return { mainStart: '', mainEnd: '', napStart: '', napEnd: '', adjustments: '' };
+    return { mainSegments: [{ start: '', end: '' }], napStart: '', napEnd: '', adjustments: '' };
   }
 
   function todayStr() {
@@ -581,6 +664,24 @@
     return 'bad';
   }
 
+  // Normalizes a stored/loaded day, migrating the old single mainStart/mainEnd shape.
+  function normalizeDay(d) {
+    d = d || {};
+    var segments = Array.isArray(d.mainSegments) ? d.mainSegments : null;
+    if (!segments) {
+      segments = (d.mainStart || d.mainEnd)
+        ? [{ start: d.mainStart || '', end: d.mainEnd || '' }]
+        : [{ start: '', end: '' }];
+    }
+    if (segments.length === 0) segments = [{ start: '', end: '' }];
+    return {
+      mainSegments: segments.map(function (s) { return { start: s.start || '', end: s.end || '' }; }),
+      napStart: d.napStart || '',
+      napEnd: d.napEnd || '',
+      adjustments: d.adjustments || ''
+    };
+  }
+
   // ---------- storage ----------
 
   async function getDb() {
@@ -602,7 +703,7 @@
   function readLocal(date) {
     try {
       var all = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
-      return all[date] || emptyDay();
+      return all[date] ? normalizeDay(all[date]) : emptyDay();
     } catch (e) {
       return emptyDay();
     }
@@ -621,17 +722,7 @@
     if (database) {
       try {
         var snap = await database.doc('days/' + date).get();
-        if (snap.exists) {
-          var d = snap.data();
-          return {
-            mainStart: d.mainStart || '',
-            mainEnd: d.mainEnd || '',
-            napStart: d.napStart || '',
-            napEnd: d.napEnd || '',
-            adjustments: d.adjustments || ''
-          };
-        }
-        return emptyDay();
+        return snap.exists ? normalizeDay(snap.data()) : emptyDay();
       } catch (e) {
         return readLocal(date);
       }
@@ -664,15 +755,89 @@
   }
 
   function renderFields() {
-    document.getElementById('mainStart').value = state.day.mainStart || '';
-    document.getElementById('mainEnd').value = state.day.mainEnd || '';
+    renderMainSegments();
     document.getElementById('napStart').value = state.day.napStart || '';
     document.getElementById('napEnd').value = state.day.napEnd || '';
     document.getElementById('adjustments').value = state.day.adjustments || '';
   }
 
+  function renderMainSegments() {
+    var container = document.getElementById('mainSegments');
+    container.innerHTML = '';
+    state.day.mainSegments.forEach(function (seg, i) {
+      var row = document.createElement('div');
+      row.className = 'segment-row';
+      row.dataset.idx = i;
+
+      var startField = makeTimeField('Start', seg.start, function (val) {
+        state.day.mainSegments[i].start = val;
+        renderCompare();
+        scheduleSave();
+      });
+      var endField = makeTimeField('End', seg.end, function (val) {
+        state.day.mainSegments[i].end = val;
+        renderCompare();
+        scheduleSave();
+      });
+
+      var remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'segment-remove';
+      remove.setAttribute('aria-label', 'Remove this sleep time');
+      remove.textContent = '×';
+      remove.addEventListener('click', function () {
+        state.day.mainSegments.splice(i, 1);
+        if (state.day.mainSegments.length === 0) state.day.mainSegments.push({ start: '', end: '' });
+        renderMainSegments();
+        renderCompare();
+        scheduleSave();
+      });
+
+      row.appendChild(startField);
+      row.appendChild(endField);
+      row.appendChild(remove);
+      container.appendChild(row);
+    });
+  }
+
+  var timeFieldSeq = 0;
+
+  function makeTimeField(labelText, value, onChange) {
+    var id = 'segTime' + (timeFieldSeq++);
+    var field = document.createElement('div');
+    field.className = 'time-field';
+
+    var label = document.createElement('label');
+    label.setAttribute('for', id);
+    label.textContent = labelText;
+
+    var input = document.createElement('input');
+    input.type = 'time';
+    input.id = id;
+    input.value = value || '';
+    input.addEventListener('change', function () { onChange(this.value); });
+
+    field.appendChild(label);
+    field.appendChild(input);
+    return field;
+  }
+
+  function mainSegmentStats() {
+    var filled = state.day.mainSegments.filter(function (s) { return s.start && s.end; });
+    if (filled.length === 0) return { totalDur: null, earliestStart: null, latestEnd: null };
+    var totalDur = 0;
+    var earliestStart = filled[0].start, latestEnd = filled[0].end;
+    filled.forEach(function (s) {
+      totalDur += duration(s.start, s.end);
+      if (toMinutes(s.start) < toMinutes(earliestStart)) earliestStart = s.start;
+      if (toMinutes(s.end) > toMinutes(latestEnd)) latestEnd = s.end;
+    });
+    return { totalDur: totalDur, earliestStart: earliestStart, latestEnd: latestEnd };
+  }
+
   function renderCompare() {
-    var mainDur = duration(state.day.mainStart, state.day.mainEnd);
+    var mainStats = mainSegmentStats();
+    var mainDur = mainStats.totalDur;
     var napDur = duration(state.day.napStart, state.day.napEnd);
 
     document.getElementById('mainDuration').textContent =
@@ -683,8 +848,8 @@
     document.getElementById('mainBar').style.width = Math.min(100, (mainDur || 0) / PLAN.main.goal * 100) + '%';
     document.getElementById('napBar').style.width = Math.min(100, (napDur || 0) / PLAN.nap.goal * 100) + '%';
 
-    var startDelta = deltaMinutes(state.day.mainStart, PLAN.main.start);
-    var endDelta = deltaMinutes(state.day.mainEnd, PLAN.main.end);
+    var startDelta = deltaMinutes(mainStats.earliestStart, PLAN.main.start);
+    var endDelta = deltaMinutes(mainStats.latestEnd, PLAN.main.end);
     var mainWorst = pickWorst(startDelta, endDelta);
     setDeltaPill('mainDelta', mainWorst);
 
@@ -758,12 +923,19 @@
     saveDay(state.date, state.day);
   }
 
-  ['mainStart', 'mainEnd', 'napStart', 'napEnd'].forEach(function (id) {
+  ['napStart', 'napEnd'].forEach(function (id) {
     document.getElementById(id).addEventListener('change', function () {
       state.day[id] = this.value;
       renderCompare();
       scheduleSave();
     });
+  });
+
+  document.getElementById('addSegment').addEventListener('click', function () {
+    state.day.mainSegments.push({ start: '', end: '' });
+    renderMainSegments();
+    renderCompare();
+    scheduleSave();
   });
 
   document.getElementById('saveAdjust').addEventListener('click', function () {
