@@ -4,19 +4,19 @@
 
   :root {
     color-scheme: dark;
-    --bg: #15120B;
-    --surface: #211B12;
-    --surface-soft: #2C2416;
-    --border: #3C311F;
-    --ink: #FBF2DE;
-    --ink-soft: #AC9C7C;
+    --bg: #1B1C1F;
+    --surface: #242529;
+    --surface-soft: #2E2F34;
+    --border: #44454C;
+    --ink: #F2F2F0;
+    --ink-soft: #9C9DA6;
     --yellow: #FFC72C;
     --yellow-deep: #F0A500;
     --red: #FF6B49;
     --success: #57C98A;
     --warning: #F0B94D;
     --critical: #FF7A63;
-    --shadow: rgba(0, 0, 0, 0.45);
+    --shadow: rgba(0, 0, 0, 0.35);
   }
 
   * { box-sizing: border-box; }
@@ -80,7 +80,7 @@
     justify-content: center;
     gap: 8px;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 16px;
     padding: 8px;
     box-shadow: 0 2px 8px var(--shadow);
@@ -134,10 +134,37 @@
     .datebar .today-btn { display: none; }
   }
 
+  /* ---------- yesterday score badge ---------- */
+  .prev-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+  }
+
+  .prev-score .ps-icon { font-size: 0.95rem; }
+
+  .prev-score .ps-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+
+  .prev-score .ps-value {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
   /* ---------- card shell ---------- */
   .card {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 20px;
     padding: 18px;
     box-shadow: 0 4px 14px var(--shadow);
@@ -200,7 +227,7 @@
 
   .compare-card {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 20px;
     padding: 16px;
     box-shadow: 0 4px 14px var(--shadow);
@@ -357,7 +384,7 @@
   .add-segment-btn:active { transform: scale(0.99); }
 
   /* ---------- score ---------- */
-  .score-card {
+  .score-top {
     display: flex;
     align-items: center;
     gap: 18px;
@@ -400,6 +427,38 @@
     font-size: 0.85rem;
     color: var(--ink-soft);
     font-weight: 700;
+  }
+
+  .score-breakdown {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1.5px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 0;
+  }
+  .score-row + .score-row { border-top: 1px solid var(--border); }
+
+  .score-row .sr-label {
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: var(--ink);
+    display: block;
+  }
+
+  .score-row .sr-times {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    display: block;
+    margin-top: 1px;
   }
 
   /* ---------- adjustments ---------- */
@@ -532,6 +591,12 @@
     <input type="date" id="datePicker">
   </div>
 
+  <div class="prev-score">
+    <span class="ps-icon">🏆</span>
+    <span class="ps-label" id="prevScoreLabel">Yesterday</span>
+    <span class="ps-value" id="prevScoreValue">--</span>
+  </div>
+
   <div class="card">
     <h2>Total sleep today</h2>
     <div class="total-top">
@@ -606,14 +671,17 @@
 
   </div>
 
-  <div class="card score-card">
-    <div class="score-ring" id="scoreRing" style="--pct:0;">
-      <span class="score-num" id="scoreNum">--</span>
+  <div class="card">
+    <div class="score-top">
+      <div class="score-ring" id="scoreRing" style="--pct:0;">
+        <span class="score-num" id="scoreNum">--</span>
+      </div>
+      <div class="score-text">
+        <p class="verdict" id="scoreVerdict">No log yet</p>
+        <p class="sub" id="scoreSub">Fill in today's times to get a score.</p>
+      </div>
     </div>
-    <div class="score-text">
-      <p class="verdict" id="scoreVerdict">No log yet</p>
-      <p class="sub" id="scoreSub">Fill in today's times to get a score.</p>
-    </div>
+    <div class="score-breakdown" id="scoreBreakdown"></div>
   </div>
 
   <div class="card adjust">
@@ -873,8 +941,8 @@
     return field;
   }
 
-  function mainSegmentStats() {
-    var filled = state.day.mainSegments.filter(function (s) { return s.start && s.end; });
+  function mainSegmentStats(day) {
+    var filled = day.mainSegments.filter(function (s) { return s.start && s.end; });
     if (filled.length === 0) return { totalDur: null, earliestStart: null, latestEnd: null };
     var totalDur = 0;
     var earliestStart = filled[0].start, latestEnd = filled[0].end;
@@ -886,8 +954,55 @@
     return { totalDur: totalDur, earliestStart: earliestStart, latestEnd: latestEnd };
   }
 
+  function dayDeltas(day) {
+    var stats = mainSegmentStats(day);
+    return [
+      deltaMinutes(stats.earliestStart, PLAN.main.start),
+      deltaMinutes(stats.latestEnd, PLAN.main.end),
+      deltaMinutes(day.napStart, PLAN.nap.start),
+      deltaMinutes(day.napEnd, PLAN.nap.end)
+    ];
+  }
+
+  function computeScore(deltas) {
+    var entered = deltas.filter(function (d) { return d !== null; });
+    if (entered.length === 0) return null;
+    var pointsPerField = 25;
+    var tolerance = 90;
+    var sum = 0;
+    entered.forEach(function (d) {
+      var abs = Math.min(tolerance, Math.abs(d));
+      sum += pointsPerField * (1 - abs / tolerance);
+    });
+    return Math.round(sum / (pointsPerField * entered.length) * 100);
+  }
+
+  function scoreTier(score) {
+    if (score === null) return { color: 'var(--ink-soft)', label: 'No log yet', text: "Fill in today's times to get a score." };
+    if (score >= 90) return { color: 'var(--success)', label: 'Right on track ⚡', text: 'Great job keeping the rhythm steady.' };
+    if (score >= 70) return { color: 'var(--success)', label: 'Good rhythm', text: 'Close to plan, just a few minutes off.' };
+    if (score >= 50) return { color: 'var(--warning)', label: 'A bit off', text: 'Some drift today, small tweaks can help.' };
+    return { color: 'var(--critical)', label: 'Way off plan', text: 'Try to land closer to the planned times tonight.' };
+  }
+
+  function fmtTime12(str) {
+    if (!str) return '--';
+    var p = str.split(':').map(Number);
+    var h = p[0], m = p[1];
+    var ap = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12;
+    if (h12 === 0) h12 = 12;
+    return h12 + ':' + (m < 10 ? '0' + m : m) + ' ' + ap;
+  }
+
+  function formatShortDate(dateStr) {
+    var parts = dateStr.split('-').map(Number);
+    var d = new Date(parts[0], parts[1] - 1, parts[2]);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
   function renderCompare() {
-    var mainStats = mainSegmentStats();
+    var mainStats = mainSegmentStats(state.day);
     var mainDur = mainStats.totalDur;
     var napDur = duration(state.day.napStart, state.day.napEnd);
 
@@ -913,7 +1028,12 @@
     document.getElementById('totalAmount').textContent = fmtDuration(total);
     document.getElementById('totalBar').style.width = Math.min(100, total / TOTAL_GOAL * 100) + '%';
 
-    renderScore([startDelta, endDelta, napStartDelta, napEndDelta]);
+    renderScore([startDelta, endDelta, napStartDelta, napEndDelta], [
+      { label: 'Bedtime', actual: mainStats.earliestStart, plan: PLAN.main.start, delta: startDelta },
+      { label: 'Wake time', actual: mainStats.latestEnd, plan: PLAN.main.end, delta: endDelta },
+      { label: 'Nap start', actual: state.day.napStart, plan: PLAN.nap.start, delta: napStartDelta },
+      { label: 'Nap end', actual: state.day.napEnd, plan: PLAN.nap.end, delta: napEndDelta }
+    ]);
   }
 
   function pickWorst(a, b) {
@@ -929,43 +1049,74 @@
     el.className = 'delta-pill' + (mins === null ? '' : ' ' + deltaTier(mins));
   }
 
-  function renderScore(deltas) {
+  function renderScore(deltas, rows) {
     var entered = deltas.filter(function (d) { return d !== null; });
+    var score = computeScore(deltas);
+    var tier = scoreTier(score);
     var ring = document.getElementById('scoreRing');
     var num = document.getElementById('scoreNum');
     var verdict = document.getElementById('scoreVerdict');
     var sub = document.getElementById('scoreSub');
 
-    if (entered.length === 0) {
-      ring.style.setProperty('--pct', 0);
-      ring.style.setProperty('--ring-color', 'var(--yellow)');
-      num.textContent = '--';
-      verdict.textContent = 'No log yet';
-      sub.textContent = "Fill in today's times to get a score.";
-      return;
-    }
+    ring.style.setProperty('--pct', score || 0);
+    ring.style.setProperty('--ring-color', tier.color);
+    num.textContent = score === null ? '--' : score;
+    verdict.textContent = tier.label;
+    sub.textContent = tier.text + (score !== null && entered.length < 4 ? ' (based on ' + entered.length + ' of 4 logged times)' : '');
 
-    var pointsPerField = 25;
-    var tolerance = 90;
-    var sum = 0;
-    entered.forEach(function (d) {
-      var abs = Math.min(tolerance, Math.abs(d));
-      sum += pointsPerField * (1 - abs / tolerance);
+    renderScoreBreakdown(rows);
+  }
+
+  function renderScoreBreakdown(rows) {
+    var container = document.getElementById('scoreBreakdown');
+    container.innerHTML = '';
+    rows.forEach(function (r) {
+      var row = document.createElement('div');
+      row.className = 'score-row';
+
+      var left = document.createElement('div');
+      var label = document.createElement('span');
+      label.className = 'sr-label';
+      label.textContent = r.label;
+      var times = document.createElement('span');
+      times.className = 'sr-times';
+      times.textContent = r.actual
+        ? fmtTime12(r.actual) + ' vs ' + fmtTime12(r.plan) + ' planned'
+        : 'Not logged · planned ' + fmtTime12(r.plan);
+      left.appendChild(label);
+      left.appendChild(times);
+
+      var pill = document.createElement('span');
+      pill.className = 'delta-pill' + (r.delta === null ? '' : ' ' + deltaTier(r.delta));
+      pill.textContent = deltaLabel(r.delta);
+
+      row.appendChild(left);
+      row.appendChild(pill);
+      container.appendChild(row);
     });
-    var score = Math.round(sum / (pointsPerField * entered.length) * 100);
+  }
 
-    var color = 'var(--critical)';
-    var label = 'Way off plan';
-    var text = 'Try to land closer to the planned times tonight.';
-    if (score >= 90) { color = 'var(--success)'; label = 'Right on track ⚡'; text = 'Great job keeping the rhythm steady.'; }
-    else if (score >= 70) { color = 'var(--success)'; label = 'Good rhythm'; text = 'Close to plan, just a few minutes off.'; }
-    else if (score >= 50) { color = 'var(--warning)'; label = 'A bit off'; text = 'Some drift today, small tweaks can help.'; }
+  async function renderPrevScore() {
+    var baseDate = state.date;
+    var prevDate = addDays(baseDate, -1);
+    var label = baseDate === todayStr() ? 'Yesterday' : formatShortDate(prevDate);
+    document.getElementById('prevScoreLabel').textContent = label;
 
-    ring.style.setProperty('--pct', score);
-    ring.style.setProperty('--ring-color', color);
-    num.textContent = score;
-    verdict.textContent = label;
-    sub.textContent = text + (entered.length < 4 ? ' (based on ' + entered.length + ' of 4 logged times)' : '');
+    var valEl = document.getElementById('prevScoreValue');
+    valEl.textContent = '…';
+    valEl.style.color = 'var(--ink-soft)';
+
+    var day = await loadDay(prevDate);
+    if (state.date !== baseDate) return; // superseded by a newer navigation
+
+    var score = computeScore(dayDeltas(day));
+    if (score === null) {
+      valEl.textContent = 'No log';
+      valEl.style.color = 'var(--ink-soft)';
+    } else {
+      valEl.textContent = score;
+      valEl.style.color = scoreTier(score).color;
+    }
   }
 
   // ---------- events ----------
@@ -1005,20 +1156,30 @@
     if (this.value) goToDate(this.value);
   });
 
+  var loadGen = 0;
+
   async function goToDate(newDate) {
+    var myGen = ++loadGen;
+    var loaded = await loadDay(newDate);
+    if (myGen !== loadGen) return; // a newer navigation already took over
     state.date = newDate;
+    state.day = loaded;
     renderDateBar();
-    state.day = await loadDay(newDate);
     renderFields();
     renderCompare();
+    renderPrevScore();
   }
 
   async function boot() {
     renderPlanLabels();
+    var myGen = ++loadGen;
+    var loaded = await loadDay(state.date);
+    if (myGen !== loadGen) return;
+    state.day = loaded;
     renderDateBar();
-    state.day = await loadDay(state.date);
     renderFields();
     renderCompare();
+    renderPrevScore();
   }
 
   boot();
