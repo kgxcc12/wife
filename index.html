@@ -3,20 +3,20 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap');
 
   :root {
-    color-scheme: dark;
-    --bg: #1B1C1F;
-    --surface: #242529;
-    --surface-soft: #2E2F34;
-    --border: #44454C;
-    --ink: #F2F2F0;
-    --ink-soft: #9C9DA6;
+    color-scheme: light;
+    --bg: #F5F5F7;
+    --surface: #FFFFFF;
+    --surface-soft: #F2F2F4;
+    --border: #E3E3E8;
+    --ink: #1D1D1F;
+    --ink-soft: #6E6E73;
     --yellow: #FFC72C;
     --yellow-deep: #F0A500;
-    --red: #FF6B49;
-    --success: #57C98A;
-    --warning: #F0B94D;
-    --critical: #FF7A63;
-    --shadow: rgba(0, 0, 0, 0.35);
+    --good: #2FB463;
+    --short: #FF8A5B;
+    --warning: #FF9F0A;
+    --critical: #FF3B30;
+    --shadow: rgba(28, 28, 30, 0.06);
   }
 
   * { box-sizing: border-box; }
@@ -28,17 +28,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, .num {
+  h1, h2, .num {
     font-family: 'Inter Tight', sans-serif;
     font-weight: 800;
   }
 
   .page {
-    max-width: 640px;
+    max-width: 720px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
     padding-inline: 16px;
     padding-block: 20px 40px;
   }
@@ -51,7 +51,7 @@
     background: linear-gradient(135deg, var(--yellow) 0%, var(--yellow-deep) 100%);
     border-radius: 22px;
     padding: 18px 20px;
-    box-shadow: 0 6px 18px var(--shadow);
+    box-shadow: 0 8px 20px rgba(240, 165, 0, 0.25);
     color: #3A2A0E;
   }
 
@@ -59,56 +59,63 @@
 
   .header h1 {
     margin: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.4rem;
+    font-weight: 800;
     line-height: 1.15;
   }
 
   .header .tag {
     margin: 2px 0 0;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-weight: 700;
-    opacity: 0.75;
+    opacity: 0.8;
   }
 
   .mascot { flex-shrink: 0; }
 
-  /* ---------- date nav ---------- */
-  .datebar {
+  @media (max-width: 380px) {
+    .header { padding: 16px; gap: 10px; }
+    .header h1 { font-size: 1.22rem; }
+    .mascot svg { width: 48px; height: 48px; }
+  }
+
+  /* ---------- week nav ---------- */
+  .weekbar {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     background: var(--surface);
-    border: 1.5px solid var(--border);
+    border: 1px solid var(--border);
     border-radius: 16px;
     padding: 8px;
-    box-shadow: 0 2px 8px var(--shadow);
+    box-shadow: 0 1px 2px var(--shadow);
   }
 
-  .datebar button.nav {
-    width: 44px;
-    height: 44px;
+  .weekbar button.nav {
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
     border: none;
     background: var(--surface-soft);
     color: var(--ink);
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 800;
     cursor: pointer;
     flex-shrink: 0;
   }
-  .datebar button.nav:hover { background: var(--yellow); }
-  .datebar button.nav:active { transform: scale(0.94); }
+  .weekbar button.nav:hover { background: var(--yellow); }
+  .weekbar button.nav:active { transform: scale(0.94); }
 
-  .datebar .datelabel {
+  .weekbar .weeklabel {
     flex: 1;
     text-align: center;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 0.96rem;
+    cursor: pointer;
   }
 
-  .datebar input[type="date"] {
+  .weekbar input[type="date"] {
     position: absolute;
     opacity: 0;
     width: 1px;
@@ -116,359 +123,278 @@
     pointer-events: none;
   }
 
-  .datebar .today-btn {
+  .weekbar .today-btn {
     border: none;
     background: var(--surface-soft);
     color: var(--ink-soft);
     font-weight: 800;
-    font-size: 0.76rem;
+    font-size: 0.74rem;
     border-radius: 10px;
     padding: 10px 12px;
-    height: 44px;
+    height: 40px;
     cursor: pointer;
     flex-shrink: 0;
   }
-  .datebar .today-btn:hover { color: var(--ink); background: var(--yellow); }
+  .weekbar .today-btn:hover { color: var(--ink); background: var(--yellow); }
 
   @media (max-width: 360px) {
-    .datebar .today-btn { display: none; }
+    .weekbar .today-btn { display: none; }
   }
 
-  /* ---------- yesterday score badge ---------- */
-  .prev-score {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    padding: 10px 14px;
-  }
-
-  .prev-score .ps-icon { font-size: 0.95rem; }
-
-  .prev-score .ps-label {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--ink-soft);
-  }
-
-  .prev-score .ps-value {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: var(--ink);
-  }
-
-  /* ---------- card shell ---------- */
-  .card {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 20px;
-    padding: 18px;
-    box-shadow: 0 4px 14px var(--shadow);
-  }
-
-  .card h2 {
-    margin: 0 0 12px;
-    font-size: 1.05rem;
-    font-weight: 700;
-  }
-
-  /* ---------- total progress ---------- */
-  .total-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .total-top .amount {
-    font-size: 1.6rem;
-    font-weight: 800;
-  }
-
-  .total-top .goal {
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-    font-weight: 700;
-  }
-
-  .bar-track {
-    background: var(--surface-soft);
-    border-radius: 999px;
-    height: 18px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .bar-fill {
-    height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--yellow) 0%, var(--yellow-deep) 100%);
-    transition: width 0.4s ease;
-  }
-
-  .bar-track.mini { height: 9px; }
-
-  /* ---------- plan vs actual ---------- */
-  .compare-grid {
+  /* ---------- stat cards ---------- */
+  .stat-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
-  @media (max-width: 460px) {
-    .compare-grid { grid-template-columns: 1fr; }
-  }
-
-  .compare-card {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 20px;
-    padding: 16px;
-    box-shadow: 0 4px 14px var(--shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .compare-card .ccard-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .compare-card .ccard-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .compare-card .ccard-title .icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    background: var(--surface-soft);
-  }
-
-  .compare-card h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  .compare-card .note {
-    font-size: 0.76rem;
-    color: var(--ink-soft);
-    font-weight: 700;
-    margin-top: -8px;
-  }
-
-  .delta-pill {
-    font-size: 0.72rem;
-    font-weight: 800;
-    padding: 3px 9px;
-    border-radius: 999px;
-    background: var(--surface-soft);
-    color: var(--ink-soft);
-    white-space: nowrap;
-  }
-  .delta-pill.good { background: rgba(87,201,138,0.18); color: var(--success); }
-  .delta-pill.warn { background: rgba(240,185,77,0.18); color: var(--warning); }
-  .delta-pill.bad  { background: rgba(255,122,99,0.18); color: var(--critical); }
-
-  .plan-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-    font-weight: 700;
-  }
-
-  .actual-row {
-    display: flex;
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
   }
 
-  .time-field {
-    flex: 1;
+  @media (max-width: 620px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 1px 2px var(--shadow);
     display: flex;
     flex-direction: column;
     gap: 4px;
-    min-width: 0;
   }
 
-  .time-field label {
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--ink-soft);
-  }
-
-  .time-field input[type="time"] {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--ink);
-    border: 1px solid var(--border);
-    background: var(--surface-soft);
-    border-radius: 10px;
-    padding: 10px 8px;
-    width: 100%;
-    min-height: 44px;
-  }
-
-  .compare-card .duration-line {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--ink-soft);
-  }
-
-  /* ---------- main sleep segments ---------- */
-  .segments {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .segment-row {
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-  }
-
-  .segment-remove {
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    border: none;
-    background: var(--surface-soft);
-    color: var(--critical);
-    font-size: 1.2rem;
-    font-weight: 800;
-    cursor: pointer;
-    line-height: 1;
-  }
-  .segment-row:only-child .segment-remove { visibility: hidden; }
-  .segment-remove:hover { background: rgba(214,80,63,0.15); }
-  .segment-remove:active { transform: scale(0.94); }
-
-  .add-segment-btn {
-    border: 1.5px dashed var(--border);
-    background: transparent;
-    color: var(--ink-soft);
-    font-weight: 800;
-    font-size: 0.85rem;
-    border-radius: 12px;
-    padding: 10px;
-    min-height: 44px;
-    cursor: pointer;
-    text-align: center;
-  }
-  .add-segment-btn:hover {
-    border-color: var(--yellow-deep);
-    color: var(--ink);
-    background: var(--surface-soft);
-  }
-  .add-segment-btn:active { transform: scale(0.99); }
-
-  /* ---------- score ---------- */
-  .score-top {
+  .stat-card .stat-top {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 6px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--ink-soft);
   }
 
-  .score-ring {
-    flex-shrink: 0;
-    width: 92px;
-    height: 92px;
+  .stat-card .stat-value {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-card .stat-caption {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- generic card ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 1px 2px var(--shadow), 0 8px 20px rgba(28,28,30,0.03);
+  }
+
+  .card h2 {
+    margin: 0 0 4px;
+    font-size: 1rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ---------- chart + gauge row ---------- */
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 620px) {
+    .chart-row { grid-template-columns: 1fr; }
+  }
+
+  .chart-card { display: flex; flex-direction: column; }
+
+  .chart-wrap {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .chart-wrap svg { display: block; width: 100%; height: auto; }
+
+  .entry-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .entry-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .entry-col .day-name {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .entry-col .day-date {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 2px;
+  }
+
+  .entry-col input {
+    width: 100%;
+    max-width: 46px;
+    text-align: center;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 7px 2px;
+    -moz-appearance: textfield;
+  }
+  .entry-col input::-webkit-outer-spin-button,
+  .entry-col input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .entry-col input:focus {
+    outline: none;
+    border-color: var(--yellow-deep);
+    background: var(--surface);
+  }
+
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 14px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+
+  .chart-legend span { display: flex; align-items: center; gap: 6px; }
+
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .dot.good { background: var(--good); }
+  .dot.short { background: var(--short); }
+
+  /* ---------- gauge card ---------- */
+  .gauge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .gauge-card h2 { justify-content: center; margin-bottom: 10px; }
+
+  .gauge {
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: conic-gradient(var(--ring-color, var(--yellow)) calc(var(--pct, 0) * 1%), var(--surface-soft) 0);
+    background: conic-gradient(var(--gauge-color, var(--yellow-deep)) calc(var(--pct, 0) * 1%), var(--surface-soft) 0);
     position: relative;
+    margin: 4px 0 10px;
   }
-
-  .score-ring::before {
+  .gauge::before {
     content: "";
     position: absolute;
-    inset: 8px;
+    inset: 11px;
     background: var(--surface);
     border-radius: 50%;
   }
-
-  .score-ring .score-num {
+  .gauge span {
     position: relative;
-    font-size: 1.7rem;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 1.55rem;
     font-weight: 800;
   }
 
-  .score-text .verdict {
-    font-size: 1.1rem;
-    font-weight: 800;
-    margin: 0 0 2px;
-  }
-
-  .score-text .sub {
+  .gauge-cap {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
     color: var(--ink-soft);
-    font-weight: 700;
   }
 
-  .score-breakdown {
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1.5px solid var(--border);
-    display: flex;
-    flex-direction: column;
+  /* ---------- insight cards ---------- */
+  .insight-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
 
-  .score-row {
+  @media (max-width: 620px) {
+    .insight-row { grid-template-columns: 1fr; }
+  }
+
+  .insight-card p {
+    margin: 6px 0 0;
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .tip-row {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 10px;
-    padding: 8px 0;
+    padding: 10px 0;
   }
-  .score-row + .score-row { border-top: 1px solid var(--border); }
+  .tip-row + .tip-row { border-top: 1px solid var(--border); }
 
-  .score-row .sr-label {
+  .tip-row .tip-icon { font-size: 1rem; flex-shrink: 0; }
+
+  .tip-row .tip-title {
     font-size: 0.86rem;
     font-weight: 800;
     color: var(--ink);
     display: block;
   }
 
-  .score-row .sr-times {
-    font-size: 0.76rem;
-    font-weight: 600;
+  .tip-row .tip-text {
+    font-size: 0.8rem;
+    font-weight: 500;
     color: var(--ink-soft);
+    line-height: 1.45;
     display: block;
     margin-top: 1px;
   }
 
   /* ---------- adjustments ---------- */
+  .adjust-cap {
+    margin: 0 0 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
   .adjust textarea {
     width: 100%;
     min-height: 92px;
     resize: vertical;
     font-family: 'Inter Tight', sans-serif;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--ink);
     border: 1px solid var(--border);
     background: var(--surface-soft);
@@ -488,7 +414,7 @@
   .adjust .saved-msg {
     font-size: 0.78rem;
     font-weight: 700;
-    color: var(--success);
+    color: var(--good);
     opacity: 0;
     transition: opacity 0.3s ease;
   }
@@ -496,30 +422,23 @@
 
   .save-btn {
     border: none;
-    background: var(--red);
+    background: var(--ink);
     color: #fff;
     font-weight: 800;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     border-radius: 12px;
     padding: 12px 20px;
     min-height: 44px;
     cursor: pointer;
-    box-shadow: 0 3px 10px rgba(228,87,46,0.35);
   }
-  .save-btn:hover { background: #c94a25; }
+  .save-btn:hover { background: #000; }
   .save-btn:active { transform: scale(0.98); }
-
-  @media (max-width: 380px) {
-    .header { padding: 16px; gap: 10px; }
-    .header h1 { font-size: 1.28rem; }
-    .mascot svg { width: 48px; height: 48px; }
-  }
 
   .footnote {
     text-align: center;
     font-size: 0.74rem;
     color: var(--ink-soft);
-    font-weight: 700;
+    font-weight: 600;
   }
 </style>
 
@@ -538,43 +457,25 @@
             <stop offset="100%" stop-color="#FF7E5F" stop-opacity="0"/>
           </radialGradient>
         </defs>
-
-        <!-- cozy blanket -->
         <path d="M4 82 Q50 98 96 82 L96 73 Q50 88 4 73 Z" fill="#FFEFCB"/>
         <ellipse cx="50" cy="82" rx="46" ry="16" fill="#FFF7E6"/>
-
-        <!-- little paws peeking out -->
         <ellipse cx="38" cy="76" rx="6.5" ry="5.5" fill="#FFD866"/>
         <ellipse cx="62" cy="76" rx="6.5" ry="5.5" fill="#FFD866"/>
-
-        <!-- small round ears -->
         <path d="M30 26 C22 13 17 6 14 2 C15 12 18 22 25 31 Z" fill="#3A2A0E"/>
         <path d="M30 28 C24 18 21 10 19 6 C20 14 22 22 26 29 Z" fill="#FFC72C"/>
         <path d="M72 24 C80 12 85 5 88 1 C87 11 84 21 77 30 Z" fill="#3A2A0E"/>
         <path d="M72 26 C78 16 81 9 83 5 C82 13 80 21 76 28 Z" fill="#FFC72C"/>
-
-        <!-- big round head -->
         <circle cx="51" cy="55" r="33" fill="url(#headGrad)"/>
-
-        <!-- soft blush -->
         <circle cx="24" cy="60" r="11" fill="url(#blushGrad)"/>
         <circle cx="78" cy="60" r="11" fill="url(#blushGrad)"/>
         <circle cx="24" cy="60" r="7" fill="#F4795A" opacity="0.75"/>
         <circle cx="78" cy="60" r="7" fill="#F4795A" opacity="0.75"/>
-
-        <!-- tiny happy closed eyes -->
         <path d="M37 53 Q41 48.5 45 53" stroke="#2E2013" stroke-width="3.1" fill="none" stroke-linecap="round"/>
         <path d="M57 53 Q61 48.5 65 53" stroke="#2E2013" stroke-width="3.1" fill="none" stroke-linecap="round"/>
-
-        <!-- small content smile -->
         <path d="M46 66 Q51 70 56 66" stroke="#2E2013" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-
-        <!-- sparkle -->
         <path d="M22 30 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6 Z" fill="#FFF3D3"/>
-
-        <!-- sleepy zzz -->
-        <text x="74" y="18" font-family="'Baloo 2', sans-serif" font-weight="700" font-size="12" fill="#EE9F00">z</text>
-        <text x="84" y="8" font-family="'Baloo 2', sans-serif" font-weight="700" font-size="9" fill="#EE9F00">z</text>
+        <text x="74" y="18" font-family="'Inter Tight', sans-serif" font-weight="800" font-size="12" fill="#EE9F00">z</text>
+        <text x="84" y="8" font-family="'Inter Tight', sans-serif" font-weight="800" font-size="9" fill="#EE9F00">z</text>
       </svg>
     </div>
     <div class="titles">
@@ -583,113 +484,77 @@
     </div>
   </div>
 
-  <div class="datebar">
-    <button class="nav" id="prevDay" aria-label="Previous day">‹</button>
-    <div class="datelabel" id="dateLabel">Today</div>
-    <button class="nav" id="nextDay" aria-label="Next day">›</button>
-    <button class="today-btn" id="jumpToday">Today</button>
-    <input type="date" id="datePicker">
+  <div class="weekbar">
+    <button class="nav" id="prevWeek" aria-label="Previous week">‹</button>
+    <div class="weeklabel" id="weekLabel">This week</div>
+    <button class="nav" id="nextWeek" aria-label="Next week">›</button>
+    <button class="today-btn" id="jumpWeek">This week</button>
+    <input type="date" id="weekPicker">
   </div>
 
-  <div class="prev-score">
-    <span class="ps-icon">🏆</span>
-    <span class="ps-label" id="prevScoreLabel">Yesterday</span>
-    <span class="ps-value" id="prevScoreValue">--</span>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-top"><span>📅</span><span>Days logged</span></div>
+      <div class="stat-value" id="statDays">0/7</div>
+      <div class="stat-caption">this week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>🌙</span><span>Total hours slept</span></div>
+      <div class="stat-value" id="statTotal">0h</div>
+      <div class="stat-caption" id="statTotalCap">of 63h goal</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>⏳</span><span>Hours short of goal</span></div>
+      <div class="stat-value" id="statShort">0h</div>
+      <div class="stat-caption" id="statShortCap">0 nights under goal</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>📊</span><span>Avg per night</span></div>
+      <div class="stat-value" id="statAvg">--</div>
+      <div class="stat-caption">goal is 9h</div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>Total sleep today</h2>
-    <div class="total-top">
-      <span class="amount" id="totalAmount">0h 0m</span>
-      <span class="goal" id="totalGoal">goal: 9h 0m</span>
+  <div class="chart-row">
+    <div class="card chart-card">
+      <h2>Hours slept vs. goal</h2>
+      <div class="chart-wrap">
+        <svg id="chartSvg" viewBox="0 0 700 220" preserveAspectRatio="none" aria-hidden="true"></svg>
+      </div>
+      <div class="entry-grid" id="entryGrid"></div>
+      <div class="chart-legend">
+        <span><i class="dot good"></i> Hours slept</span>
+        <span><i class="dot short"></i> Short of goal</span>
+      </div>
     </div>
-    <div class="bar-track">
-      <div class="bar-fill" id="totalBar" style="width:0%"></div>
+
+    <div class="card gauge-card">
+      <h2>Weekly consistency</h2>
+      <div class="gauge" id="gaugeRing" style="--pct:0;">
+        <span id="gaugeValue">--</span>
+      </div>
+      <p class="gauge-cap" id="gaugeCaption">Log a few nights to see this.</p>
     </div>
   </div>
 
-  <div class="compare-grid">
-
-    <div class="compare-card">
-      <div class="ccard-head">
-        <div class="ccard-title">
-          <span class="icon">🌙</span>
-          <h3>Main sleep</h3>
-        </div>
-        <span class="delta-pill" id="mainDelta">--</span>
-      </div>
-      <div class="plan-row">
-        <span>Plan</span>
-        <span id="mainPlanLabel">3:30 AM → 10:30 AM</span>
-      </div>
-      <div class="note">Add every stretch she slept in this window</div>
-      <div class="segments" id="mainSegments"></div>
-      <button class="add-segment-btn" id="addSegment" type="button">+ Add sleep time</button>
-      <div class="bar-track mini"><div class="bar-fill" id="mainBar" style="width:0%"></div></div>
-      <div class="duration-line" id="mainDuration">Log times to see duration</div>
+  <div class="insight-row">
+    <div class="card insight-card">
+      <h2>📈 This week's trend</h2>
+      <p id="trendText">Log a few nights to see her trend.</p>
     </div>
-
-    <div class="compare-card">
-      <div class="ccard-head">
-        <div class="ccard-title">
-          <span class="icon">
-            <svg width="20" height="20" viewBox="0 0 100 100" aria-hidden="true">
-              <path d="M30 30 C20 18 14 10 11 5 C13 16 17 27 24 35 Z" fill="#3A2A0E"/>
-              <path d="M30 32 C23 22 19 13 17 8 C18 17 21 26 26 33 Z" fill="#FFC72C"/>
-              <path d="M70 28 C80 15 86 7 89 2 C87 13 83 24 76 33 Z" fill="#3A2A0E"/>
-              <path d="M70 30 C77 20 81 12 83 7 C81 16 78 25 74 31 Z" fill="#FFC72C"/>
-              <circle cx="50" cy="56" r="35" fill="#FFC72C"/>
-              <circle cx="26" cy="62" r="9" fill="#F4795A" opacity="0.8"/>
-              <circle cx="74" cy="62" r="9" fill="#F4795A" opacity="0.8"/>
-              <path d="M36 55 Q40.5 50 45 55" stroke="#2E2013" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-              <path d="M55 55 Q59.5 50 64 55" stroke="#2E2013" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-              <path d="M45 68 Q50 72 55 68" stroke="#2E2013" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <h3>Power nap</h3>
-        </div>
-        <span class="delta-pill" id="napDelta">--</span>
-      </div>
-      <div class="plan-row">
-        <span>Plan</span>
-        <span id="napPlanLabel">1:30 PM → 3:30 PM</span>
-      </div>
-      <div class="note">Ends before her 4 PM meeting</div>
-      <div class="actual-row">
-        <div class="time-field">
-          <label for="napStart">Nap start</label>
-          <input type="time" id="napStart">
-        </div>
-        <div class="time-field">
-          <label for="napEnd">Nap end</label>
-          <input type="time" id="napEnd">
-        </div>
-      </div>
-      <div class="bar-track mini"><div class="bar-fill" id="napBar" style="width:0%"></div></div>
-      <div class="duration-line" id="napDuration">Log times to see duration</div>
+    <div class="card insight-card">
+      <h2>💡 What to work on</h2>
+      <div id="tipsList"></div>
     </div>
-
-  </div>
-
-  <div class="card">
-    <div class="score-top">
-      <div class="score-ring" id="scoreRing" style="--pct:0;">
-        <span class="score-num" id="scoreNum">--</span>
-      </div>
-      <div class="score-text">
-        <p class="verdict" id="scoreVerdict">No log yet</p>
-        <p class="sub" id="scoreSub">Fill in today's times to get a score.</p>
-      </div>
-    </div>
-    <div class="score-breakdown" id="scoreBreakdown"></div>
   </div>
 
   <div class="card adjust">
     <h2>Adjustments for awareness</h2>
-    <textarea id="adjustments" placeholder="e.g. woke up 20 min early because of noise, try earlier wind-down tonight..."></textarea>
+    <p class="adjust-cap" id="adjustCaption">For this week</p>
+    <textarea id="notes" placeholder="e.g. bedtime keeps slipping on weekends, try an earlier wind-down alarm..."></textarea>
     <div class="adjust-foot">
       <span class="saved-msg" id="savedMsg">Saved ⚡</span>
-      <button class="save-btn" id="saveAdjust">Save note</button>
+      <button class="save-btn" id="saveNotes">Save note</button>
     </div>
   </div>
 
@@ -699,106 +564,78 @@
 
 <script>
 (function () {
-  var PLAN = {
-    main: { start: '03:30', end: '10:30', goal: 420, label: '3:30 AM → 10:30 AM' },
-    nap:  { start: '13:30', end: '15:30', goal: 120, label: '1:30 PM → 3:30 PM' }
-  };
-  var TOTAL_GOAL = PLAN.main.goal + PLAN.nap.goal;
-  var LS_KEY = 'pika-sleep-days';
+  var DAILY_GOAL = 9; // 7h main sleep (3:30-10:30am) + 2h power nap (1:30-3:30pm)
+  var WEEKLY_GOAL = DAILY_GOAL * 7;
+  var DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var LS_DAYS_KEY = 'pika-sleep-days-v2';
+  var LS_WEEKS_KEY = 'pika-sleep-weeks-v2';
 
   var db = null;
   var dbChecked = false;
+  var loadGen = 0;
 
   var state = {
-    date: todayStr(),
-    day: emptyDay()
+    weekStart: mondayOf(todayStr()),
+    hours: [null, null, null, null, null, null, null],
+    notes: '',
+    prevWeekAvg: null
   };
 
-  function emptyDay() {
-    return { mainSegments: [{ start: '', end: '' }], napStart: '', napEnd: '', adjustments: '' };
-  }
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
   function todayStr() {
     var d = new Date();
     return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
   }
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
   function addDays(dateStr, n) {
-    var parts = dateStr.split('-').map(Number);
-    var d = new Date(parts[0], parts[1] - 1, parts[2]);
+    var p = dateStr.split('-').map(Number);
+    var d = new Date(p[0], p[1] - 1, p[2]);
     d.setDate(d.getDate() + n);
     return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
   }
 
-  function formatDateLabel(dateStr) {
-    var parts = dateStr.split('-').map(Number);
-    var d = new Date(parts[0], parts[1] - 1, parts[2]);
-    var opts = { weekday: 'short', month: 'short', day: 'numeric' };
-    var label = d.toLocaleDateString(undefined, opts);
-    return dateStr === todayStr() ? label + ' · Today' : label;
+  function mondayOf(dateStr) {
+    var p = dateStr.split('-').map(Number);
+    var d = new Date(p[0], p[1] - 1, p[2]);
+    var offset = (d.getDay() + 6) % 7; // days since Monday
+    d.setDate(d.getDate() - offset);
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
   }
 
-  function toMinutes(str) {
-    if (!str) return null;
-    var p = str.split(':').map(Number);
-    return p[0] * 60 + p[1];
+  function weekDates(weekStart) {
+    var out = [];
+    for (var i = 0; i < 7; i++) out.push(addDays(weekStart, i));
+    return out;
   }
 
-  function duration(startStr, endStr) {
-    var s = toMinutes(startStr), e = toMinutes(endStr);
-    if (s === null || e === null) return null;
-    var d = e - s;
-    if (d < 0) d += 1440;
-    return d;
+  function shortDate(dateStr) {
+    var p = dateStr.split('-').map(Number);
+    var d = new Date(p[0], p[1] - 1, p[2]);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
   }
 
-  function fmtDuration(min) {
-    if (min === null) return '--';
-    var h = Math.floor(min / 60), m = min % 60;
-    return h + 'h ' + m + 'm';
+  function dayNum(dateStr) {
+    return Number(dateStr.split('-')[2]);
   }
 
-  function deltaMinutes(actualStr, planStr) {
-    var a = toMinutes(actualStr), p = toMinutes(planStr);
-    if (a === null || p === null) return null;
-    var d = a - p;
-    if (d > 720) d -= 1440;
-    if (d < -720) d += 1440;
-    return d;
+  function formatWeekLabel(weekStart) {
+    var end = addDays(weekStart, 6);
+    var startLabel = shortDate(weekStart);
+    var endLabel = shortDate(end);
+    var label = startLabel + ' – ' + endLabel;
+    return weekStart === mondayOf(todayStr()) ? 'This week · ' + label : label;
   }
 
-  function deltaLabel(mins) {
-    if (mins === null) return '--';
-    if (mins === 0) return 'on time';
-    var abs = Math.abs(mins);
-    return (mins > 0 ? '+' : '-') + abs + 'm ' + (mins > 0 ? 'later' : 'earlier');
+  function fmtHours(n) {
+    if (n === null || n === undefined || isNaN(n)) return '--';
+    var r = Math.round(n * 10) / 10;
+    return (Math.abs(r % 1) < 0.05 ? r.toFixed(0) : r.toFixed(1)) + 'h';
   }
 
-  function deltaTier(mins) {
-    if (mins === null) return '';
-    var abs = Math.abs(mins);
-    if (abs <= 15) return 'good';
-    if (abs <= 45) return 'warn';
-    return 'bad';
-  }
-
-  // Normalizes a stored/loaded day, migrating the old single mainStart/mainEnd shape.
-  function normalizeDay(d) {
-    d = d || {};
-    var segments = Array.isArray(d.mainSegments) ? d.mainSegments : null;
-    if (!segments) {
-      segments = (d.mainStart || d.mainEnd)
-        ? [{ start: d.mainStart || '', end: d.mainEnd || '' }]
-        : [{ start: '', end: '' }];
-    }
-    if (segments.length === 0) segments = [{ start: '', end: '' }];
-    return {
-      mainSegments: segments.map(function (s) { return { start: s.start || '', end: s.end || '' }; }),
-      napStart: d.napStart || '',
-      napEnd: d.napEnd || '',
-      adjustments: d.adjustments || ''
-    };
+  function avg(arr) {
+    if (arr.length === 0) return null;
+    return arr.reduce(function (a, b) { return a + b; }, 0) / arr.length;
   }
 
   // ---------- storage ----------
@@ -819,367 +656,376 @@
     return db;
   }
 
-  function readLocal(date) {
+  function readLocalDay(date) {
     try {
-      var all = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
-      return all[date] ? normalizeDay(all[date]) : emptyDay();
-    } catch (e) {
-      return emptyDay();
-    }
+      var all = JSON.parse(localStorage.getItem(LS_DAYS_KEY) || '{}');
+      var d = all[date];
+      return d && typeof d.hours === 'number' ? d.hours : null;
+    } catch (e) { return null; }
   }
 
-  function writeLocal(date, data) {
+  function writeLocalDay(date, hours) {
     try {
-      var all = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
-      all[date] = data;
-      localStorage.setItem(LS_KEY, JSON.stringify(all));
+      var all = JSON.parse(localStorage.getItem(LS_DAYS_KEY) || '{}');
+      all[date] = { hours: hours };
+      localStorage.setItem(LS_DAYS_KEY, JSON.stringify(all));
     } catch (e) {}
   }
 
-  async function loadDay(date) {
+  function readLocalWeek(weekStart) {
+    try {
+      var all = JSON.parse(localStorage.getItem(LS_WEEKS_KEY) || '{}');
+      var w = all[weekStart];
+      return w && typeof w.notes === 'string' ? w.notes : '';
+    } catch (e) { return ''; }
+  }
+
+  function writeLocalWeek(weekStart, notes) {
+    try {
+      var all = JSON.parse(localStorage.getItem(LS_WEEKS_KEY) || '{}');
+      all[weekStart] = { notes: notes };
+      localStorage.setItem(LS_WEEKS_KEY, JSON.stringify(all));
+    } catch (e) {}
+  }
+
+  async function loadDayHours(date) {
     var database = await getDb();
     if (database) {
       try {
         var snap = await database.doc('days/' + date).get();
-        return snap.exists ? normalizeDay(snap.data()) : emptyDay();
+        if (!snap.exists) return null;
+        var d = snap.data();
+        if (typeof d.hours === 'number') return d.hours;
+        return null;
       } catch (e) {
-        return readLocal(date);
+        return readLocalDay(date);
       }
     }
-    return readLocal(date);
+    return readLocalDay(date);
   }
 
-  async function saveDay(date, data) {
+  async function saveDayHours(date, hours) {
     var database = await getDb();
     if (database) {
       try {
-        await database.doc('days/' + date).set(data);
+        await database.doc('days/' + date).set({ hours: hours });
         return;
       } catch (e) {}
     }
-    writeLocal(date, data);
+    writeLocalDay(date, hours);
   }
 
-  // ---------- render ----------
-
-  function renderPlanLabels() {
-    document.getElementById('mainPlanLabel').textContent = PLAN.main.label;
-    document.getElementById('napPlanLabel').textContent = PLAN.nap.label;
-    document.getElementById('totalGoal').textContent = 'goal: ' + fmtDuration(TOTAL_GOAL);
-  }
-
-  function renderDateBar() {
-    document.getElementById('dateLabel').textContent = formatDateLabel(state.date);
-    document.getElementById('datePicker').value = state.date;
-  }
-
-  function renderFields() {
-    renderMainSegments();
-    document.getElementById('napStart').value = state.day.napStart || '';
-    document.getElementById('napEnd').value = state.day.napEnd || '';
-    document.getElementById('adjustments').value = state.day.adjustments || '';
-  }
-
-  function renderMainSegments() {
-    var container = document.getElementById('mainSegments');
-    container.innerHTML = '';
-    state.day.mainSegments.forEach(function (seg, i) {
-      var row = document.createElement('div');
-      row.className = 'segment-row';
-      row.dataset.idx = i;
-
-      var startField = makeTimeField('Start', seg.start, function (val) {
-        state.day.mainSegments[i].start = val;
-        renderCompare();
-        scheduleSave();
-      });
-      var endField = makeTimeField('End', seg.end, function (val) {
-        state.day.mainSegments[i].end = val;
-        renderCompare();
-        scheduleSave();
-      });
-
-      var remove = document.createElement('button');
-      remove.type = 'button';
-      remove.className = 'segment-remove';
-      remove.setAttribute('aria-label', 'Remove this sleep time');
-      remove.textContent = '×';
-      remove.addEventListener('click', function () {
-        state.day.mainSegments.splice(i, 1);
-        if (state.day.mainSegments.length === 0) state.day.mainSegments.push({ start: '', end: '' });
-        renderMainSegments();
-        renderCompare();
-        scheduleSave();
-      });
-
-      row.appendChild(startField);
-      row.appendChild(endField);
-      row.appendChild(remove);
-      container.appendChild(row);
-    });
-  }
-
-  var timeFieldSeq = 0;
-
-  function makeTimeField(labelText, value, onChange) {
-    var id = 'segTime' + (timeFieldSeq++);
-    var field = document.createElement('div');
-    field.className = 'time-field';
-
-    var label = document.createElement('label');
-    label.setAttribute('for', id);
-    label.textContent = labelText;
-
-    var input = document.createElement('input');
-    input.type = 'time';
-    input.id = id;
-    input.value = value || '';
-    input.addEventListener('change', function () { onChange(this.value); });
-
-    field.appendChild(label);
-    field.appendChild(input);
-    return field;
-  }
-
-  function mainSegmentStats(day) {
-    var filled = day.mainSegments.filter(function (s) { return s.start && s.end; });
-    if (filled.length === 0) return { totalDur: null, earliestStart: null, latestEnd: null };
-    var totalDur = 0;
-    var earliestStart = filled[0].start, latestEnd = filled[0].end;
-    filled.forEach(function (s) {
-      totalDur += duration(s.start, s.end);
-      if (toMinutes(s.start) < toMinutes(earliestStart)) earliestStart = s.start;
-      if (toMinutes(s.end) > toMinutes(latestEnd)) latestEnd = s.end;
-    });
-    return { totalDur: totalDur, earliestStart: earliestStart, latestEnd: latestEnd };
-  }
-
-  function dayDeltas(day) {
-    var stats = mainSegmentStats(day);
-    return [
-      deltaMinutes(stats.earliestStart, PLAN.main.start),
-      deltaMinutes(stats.latestEnd, PLAN.main.end),
-      deltaMinutes(day.napStart, PLAN.nap.start),
-      deltaMinutes(day.napEnd, PLAN.nap.end)
-    ];
-  }
-
-  function computeScore(deltas) {
-    var entered = deltas.filter(function (d) { return d !== null; });
-    if (entered.length === 0) return null;
-    var pointsPerField = 25;
-    var tolerance = 90;
-    var sum = 0;
-    entered.forEach(function (d) {
-      var abs = Math.min(tolerance, Math.abs(d));
-      sum += pointsPerField * (1 - abs / tolerance);
-    });
-    return Math.round(sum / (pointsPerField * entered.length) * 100);
-  }
-
-  function scoreTier(score) {
-    if (score === null) return { color: 'var(--ink-soft)', label: 'No log yet', text: "Fill in today's times to get a score." };
-    if (score >= 90) return { color: 'var(--success)', label: 'Right on track ⚡', text: 'Great job keeping the rhythm steady.' };
-    if (score >= 70) return { color: 'var(--success)', label: 'Good rhythm', text: 'Close to plan, just a few minutes off.' };
-    if (score >= 50) return { color: 'var(--warning)', label: 'A bit off', text: 'Some drift today, small tweaks can help.' };
-    return { color: 'var(--critical)', label: 'Way off plan', text: 'Try to land closer to the planned times tonight.' };
-  }
-
-  function fmtTime12(str) {
-    if (!str) return '--';
-    var p = str.split(':').map(Number);
-    var h = p[0], m = p[1];
-    var ap = h >= 12 ? 'PM' : 'AM';
-    var h12 = h % 12;
-    if (h12 === 0) h12 = 12;
-    return h12 + ':' + (m < 10 ? '0' + m : m) + ' ' + ap;
-  }
-
-  function formatShortDate(dateStr) {
-    var parts = dateStr.split('-').map(Number);
-    var d = new Date(parts[0], parts[1] - 1, parts[2]);
-    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-  }
-
-  function renderCompare() {
-    var mainStats = mainSegmentStats(state.day);
-    var mainDur = mainStats.totalDur;
-    var napDur = duration(state.day.napStart, state.day.napEnd);
-
-    document.getElementById('mainDuration').textContent =
-      mainDur === null ? 'Log times to see duration' : fmtDuration(mainDur) + ' of ' + fmtDuration(PLAN.main.goal) + ' goal';
-    document.getElementById('napDuration').textContent =
-      napDur === null ? 'Log times to see duration' : fmtDuration(napDur) + ' of ' + fmtDuration(PLAN.nap.goal) + ' goal';
-
-    document.getElementById('mainBar').style.width = Math.min(100, (mainDur || 0) / PLAN.main.goal * 100) + '%';
-    document.getElementById('napBar').style.width = Math.min(100, (napDur || 0) / PLAN.nap.goal * 100) + '%';
-
-    var startDelta = deltaMinutes(mainStats.earliestStart, PLAN.main.start);
-    var endDelta = deltaMinutes(mainStats.latestEnd, PLAN.main.end);
-    var mainWorst = pickWorst(startDelta, endDelta);
-    setDeltaPill('mainDelta', mainWorst);
-
-    var napStartDelta = deltaMinutes(state.day.napStart, PLAN.nap.start);
-    var napEndDelta = deltaMinutes(state.day.napEnd, PLAN.nap.end);
-    var napWorst = pickWorst(napStartDelta, napEndDelta);
-    setDeltaPill('napDelta', napWorst);
-
-    var total = (mainDur || 0) + (napDur || 0);
-    document.getElementById('totalAmount').textContent = fmtDuration(total);
-    document.getElementById('totalBar').style.width = Math.min(100, total / TOTAL_GOAL * 100) + '%';
-
-    renderScore([startDelta, endDelta, napStartDelta, napEndDelta], [
-      { label: 'Bedtime', actual: mainStats.earliestStart, plan: PLAN.main.start, delta: startDelta },
-      { label: 'Wake time', actual: mainStats.latestEnd, plan: PLAN.main.end, delta: endDelta },
-      { label: 'Nap start', actual: state.day.napStart, plan: PLAN.nap.start, delta: napStartDelta },
-      { label: 'Nap end', actual: state.day.napEnd, plan: PLAN.nap.end, delta: napEndDelta }
-    ]);
-  }
-
-  function pickWorst(a, b) {
-    if (a === null && b === null) return null;
-    if (a === null) return b;
-    if (b === null) return a;
-    return Math.abs(a) >= Math.abs(b) ? a : b;
-  }
-
-  function setDeltaPill(id, mins) {
-    var el = document.getElementById(id);
-    el.textContent = deltaLabel(mins);
-    el.className = 'delta-pill' + (mins === null ? '' : ' ' + deltaTier(mins));
-  }
-
-  function renderScore(deltas, rows) {
-    var entered = deltas.filter(function (d) { return d !== null; });
-    var score = computeScore(deltas);
-    var tier = scoreTier(score);
-    var ring = document.getElementById('scoreRing');
-    var num = document.getElementById('scoreNum');
-    var verdict = document.getElementById('scoreVerdict');
-    var sub = document.getElementById('scoreSub');
-
-    ring.style.setProperty('--pct', score || 0);
-    ring.style.setProperty('--ring-color', tier.color);
-    num.textContent = score === null ? '--' : score;
-    verdict.textContent = tier.label;
-    sub.textContent = tier.text + (score !== null && entered.length < 4 ? ' (based on ' + entered.length + ' of 4 logged times)' : '');
-
-    renderScoreBreakdown(rows);
-  }
-
-  function renderScoreBreakdown(rows) {
-    var container = document.getElementById('scoreBreakdown');
-    container.innerHTML = '';
-    rows.forEach(function (r) {
-      var row = document.createElement('div');
-      row.className = 'score-row';
-
-      var left = document.createElement('div');
-      var label = document.createElement('span');
-      label.className = 'sr-label';
-      label.textContent = r.label;
-      var times = document.createElement('span');
-      times.className = 'sr-times';
-      times.textContent = r.actual
-        ? fmtTime12(r.actual) + ' vs ' + fmtTime12(r.plan) + ' planned'
-        : 'Not logged · planned ' + fmtTime12(r.plan);
-      left.appendChild(label);
-      left.appendChild(times);
-
-      var pill = document.createElement('span');
-      pill.className = 'delta-pill' + (r.delta === null ? '' : ' ' + deltaTier(r.delta));
-      pill.textContent = deltaLabel(r.delta);
-
-      row.appendChild(left);
-      row.appendChild(pill);
-      container.appendChild(row);
-    });
-  }
-
-  async function renderPrevScore() {
-    var baseDate = state.date;
-    var prevDate = addDays(baseDate, -1);
-    var label = baseDate === todayStr() ? 'Yesterday' : formatShortDate(prevDate);
-    document.getElementById('prevScoreLabel').textContent = label;
-
-    var valEl = document.getElementById('prevScoreValue');
-    valEl.textContent = '…';
-    valEl.style.color = 'var(--ink-soft)';
-
-    var day = await loadDay(prevDate);
-    if (state.date !== baseDate) return; // superseded by a newer navigation
-
-    var score = computeScore(dayDeltas(day));
-    if (score === null) {
-      valEl.textContent = 'No log';
-      valEl.style.color = 'var(--ink-soft)';
-    } else {
-      valEl.textContent = score;
-      valEl.style.color = scoreTier(score).color;
+  async function loadWeekNotes(weekStart) {
+    var database = await getDb();
+    if (database) {
+      try {
+        var snap = await database.doc('weeks/' + weekStart).get();
+        return snap.exists && typeof snap.data().notes === 'string' ? snap.data().notes : '';
+      } catch (e) {
+        return readLocalWeek(weekStart);
+      }
     }
+    return readLocalWeek(weekStart);
+  }
+
+  async function saveWeekNotes(weekStart, notes) {
+    var database = await getDb();
+    if (database) {
+      try {
+        await database.doc('weeks/' + weekStart).set({ notes: notes });
+        return;
+      } catch (e) {}
+    }
+    writeLocalWeek(weekStart, notes);
+  }
+
+  async function loadWeek(weekStart) {
+    var dates = weekDates(weekStart);
+    var hours = await Promise.all(dates.map(loadDayHours));
+    var notes = await loadWeekNotes(weekStart);
+    return { hours: hours, notes: notes };
+  }
+
+  // ---------- stats ----------
+
+  function weekStats(hours) {
+    var logged = hours.filter(function (h) { return h !== null; });
+    var daysLogged = logged.length;
+    var totalHours = logged.reduce(function (a, b) { return a + b; }, 0);
+    var shortfallTotal = logged.reduce(function (s, h) { return s + Math.max(0, DAILY_GOAL - h); }, 0);
+    var shortfallDays = logged.filter(function (h) { return h < DAILY_GOAL; }).length;
+    return {
+      daysLogged: daysLogged,
+      totalHours: totalHours,
+      shortfallTotal: shortfallTotal,
+      shortfallDays: shortfallDays,
+      avgHours: daysLogged ? totalHours / daysLogged : null
+    };
+  }
+
+  // ---------- chart ----------
+
+  function renderChart(hours) {
+    var W = 700, H = 220, BASE_Y = 190, TOP_PAD = 26;
+    var COL_W = W / 7, BAR_W = 24, PAIR_GAP = 6;
+    var plotH = BASE_Y - TOP_PAD;
+
+    var validHours = hours.filter(function (h) { return h !== null; });
+    var rawMax = Math.max(DAILY_GOAL + 2, validHours.length ? Math.max.apply(null, validHours) + 1 : 0);
+    var domainMax = Math.ceil(rawMax / 3) * 3;
+
+    function scale(h) { return (h / domainMax) * plotH; }
+
+    var svg = '';
+    svg += '<line x1="0" y1="' + BASE_Y + '" x2="' + W + '" y2="' + BASE_Y + '" stroke="var(--border)" stroke-width="1.5"/>';
+
+    for (var v = 3; v <= domainMax; v += 3) {
+      var gy = BASE_Y - scale(v);
+      var isGoal = v === DAILY_GOAL;
+      svg += '<line x1="0" y1="' + gy + '" x2="' + W + '" y2="' + gy + '" stroke="' + (isGoal ? 'var(--yellow-deep)' : 'var(--border)') + '" stroke-width="' + (isGoal ? 1.6 : 1) + '" stroke-dasharray="' + (isGoal ? '5,4' : '2,4') + '" opacity="' + (isGoal ? '0.9' : '0.7') + '"/>';
+      svg += '<text x="' + (W - 4) + '" y="' + (gy - 5) + '" text-anchor="end" font-size="11" font-weight="700" fill="' + (isGoal ? 'var(--yellow-deep)' : 'var(--ink-soft)') + '" font-family="Inter Tight, sans-serif">' + (isGoal ? 'Goal · 9h' : v + 'h') + '</text>';
+    }
+
+    for (var i = 0; i < 7; i++) {
+      var cx = i * COL_W + COL_W / 2;
+      var h = hours[i];
+      if (h === null) {
+        svg += '<rect x="' + (cx - 7) + '" y="' + (BASE_Y - 4) + '" width="14" height="4" rx="2" fill="var(--border)"/>';
+        continue;
+      }
+      var actual = Math.min(h, domainMax);
+      var short = Math.max(0, DAILY_GOAL - h);
+      var actualX = cx - BAR_W - PAIR_GAP / 2;
+      var shortX = cx + PAIR_GAP / 2;
+
+      var aH = scale(actual), aY = BASE_Y - aH;
+      svg += '<rect x="' + actualX + '" y="' + aY + '" width="' + BAR_W + '" height="' + aH + '" rx="6" fill="var(--good)"/>';
+
+      if (short > 0) {
+        var sH = scale(Math.min(short, domainMax)), sY = BASE_Y - sH;
+        svg += '<rect x="' + shortX + '" y="' + sY + '" width="' + BAR_W + '" height="' + sH + '" rx="6" fill="var(--short)"/>';
+      }
+    }
+
+    document.getElementById('chartSvg').innerHTML = svg;
+  }
+
+  // ---------- entry grid ----------
+
+  function renderEntryGrid(weekStart, hours) {
+    var dates = weekDates(weekStart);
+    var container = document.getElementById('entryGrid');
+    container.innerHTML = '';
+    dates.forEach(function (date, i) {
+      var col = document.createElement('div');
+      col.className = 'entry-col';
+
+      var name = document.createElement('span');
+      name.className = 'day-name';
+      name.textContent = DAY_NAMES[i];
+
+      var dnum = document.createElement('span');
+      dnum.className = 'day-date';
+      dnum.textContent = dayNum(date);
+
+      var input = document.createElement('input');
+      input.type = 'number';
+      input.step = '0.5';
+      input.min = '0';
+      input.max = '14';
+      input.inputMode = 'decimal';
+      input.placeholder = '–';
+      input.value = hours[i] === null ? '' : hours[i];
+      input.setAttribute('aria-label', DAY_NAMES[i] + ' hours slept');
+
+      input.addEventListener('input', function () {
+        var v = this.value.trim();
+        state.hours[i] = v === '' ? null : Math.max(0, Math.min(14, parseFloat(v)));
+        renderAll();
+      });
+      input.addEventListener('change', function () {
+        var ownerWeek = weekStart;
+        var date2 = date;
+        var val = state.hours[i];
+        if (state.weekStart === ownerWeek) saveDayHours(date2, val);
+      });
+
+      col.appendChild(name);
+      col.appendChild(dnum);
+      col.appendChild(input);
+      container.appendChild(col);
+    });
+  }
+
+  // ---------- stat cards + gauge ----------
+
+  function renderStats(stats) {
+    document.getElementById('statDays').textContent = stats.daysLogged + '/7';
+    document.getElementById('statTotal').textContent = fmtHours(stats.totalHours);
+    document.getElementById('statTotalCap').textContent = 'of ' + WEEKLY_GOAL + 'h goal';
+    document.getElementById('statShort').textContent = fmtHours(stats.shortfallTotal);
+    document.getElementById('statShortCap').textContent = stats.shortfallDays + (stats.shortfallDays === 1 ? ' night' : ' nights') + ' under goal';
+    document.getElementById('statAvg').textContent = stats.avgHours === null ? '--' : fmtHours(stats.avgHours);
+
+    var pct = Math.round((stats.totalHours / WEEKLY_GOAL) * 100);
+    var ring = document.getElementById('gaugeRing');
+    var val = document.getElementById('gaugeValue');
+    var cap = document.getElementById('gaugeCaption');
+
+    if (stats.daysLogged === 0) {
+      ring.style.setProperty('--pct', 0);
+      ring.style.setProperty('--gauge-color', 'var(--border)');
+      val.textContent = '--';
+      cap.textContent = 'Log a few nights to see this.';
+      return;
+    }
+
+    var color = 'var(--critical)';
+    if (pct >= 90) color = 'var(--good)';
+    else if (pct >= 70) color = 'var(--yellow-deep)';
+    else if (pct >= 50) color = 'var(--warning)';
+
+    ring.style.setProperty('--pct', Math.min(100, pct));
+    ring.style.setProperty('--gauge-color', color);
+    val.textContent = pct + '%';
+    cap.textContent = fmtHours(stats.totalHours) + ' logged of ' + WEEKLY_GOAL + 'h this week';
+  }
+
+  // ---------- insights ----------
+
+  function renderTrend(stats, prevAvg) {
+    var el = document.getElementById('trendText');
+    if (stats.avgHours === null) {
+      el.textContent = "Log a few nights to see her trend.";
+      return;
+    }
+    if (prevAvg === null) {
+      el.textContent = 'Averaging ' + fmtHours(stats.avgHours) + ' a night across ' + stats.daysLogged + (stats.daysLogged === 1 ? ' night' : ' nights') + ' logged this week.';
+      return;
+    }
+    var diff = Math.round((stats.avgHours - prevAvg) * 10) / 10;
+    if (Math.abs(diff) < 0.15) {
+      el.textContent = 'Averaging ' + fmtHours(stats.avgHours) + ' a night, about the same as last week.';
+    } else if (diff > 0) {
+      el.textContent = 'Averaging ' + fmtHours(stats.avgHours) + ' a night, up ' + fmtHours(Math.abs(diff)) + ' from last week.';
+    } else {
+      el.textContent = 'Averaging ' + fmtHours(stats.avgHours) + ' a night, down ' + fmtHours(Math.abs(diff)) + ' from last week.';
+    }
+  }
+
+  function renderTips(hours) {
+    var tips = [];
+
+    var worstIdx = -1, worstDeficit = 0.9;
+    hours.forEach(function (h, i) {
+      if (h === null) return;
+      var d = DAILY_GOAL - h;
+      if (d > worstDeficit) { worstDeficit = d; worstIdx = i; }
+    });
+    if (worstIdx >= 0) {
+      tips.push({
+        icon: '⚠️',
+        title: DAY_NAMES[worstIdx] + ' was the toughest night',
+        text: fmtHours(hours[worstIdx]) + ' logged, ' + fmtHours(worstDeficit) + ' under the 9h goal.'
+      });
+    }
+
+    var weekdayVals = [0, 1, 2, 3, 4].map(function (i) { return hours[i]; }).filter(function (h) { return h !== null; });
+    var weekendVals = [5, 6].map(function (i) { return hours[i]; }).filter(function (h) { return h !== null; });
+    if (weekdayVals.length && weekendVals.length) {
+      var wd = avg(weekdayVals), we = avg(weekendVals);
+      var diff = Math.round((wd - we) * 10) / 10;
+      if (diff >= 1) {
+        tips.push({ icon: '🌙', title: 'Weekend dip', text: 'Weekend nights are averaging ' + fmtHours(diff) + ' less than weekdays.' });
+      } else if (diff <= -1) {
+        tips.push({ icon: '🌙', title: 'Weekday dip', text: 'Weekdays are averaging ' + fmtHours(Math.abs(diff)) + ' less than weekends.' });
+      }
+    }
+
+    var missing = hours.filter(function (h) { return h === null; }).length;
+    if (missing > 0) {
+      tips.push({ icon: '📝', title: 'Fill in the gaps', text: missing + (missing === 1 ? ' night' : ' nights') + ' not logged yet — log them for a fuller picture.' });
+    }
+
+    if (tips.length === 0) {
+      tips.push({ icon: '✅', title: 'Right on track', text: 'No major gaps this week — keep the rhythm going.' });
+    }
+
+    var list = document.getElementById('tipsList');
+    list.innerHTML = '';
+    tips.slice(0, 3).forEach(function (t) {
+      var row = document.createElement('div');
+      row.className = 'tip-row';
+      row.innerHTML = '<span class="tip-icon">' + t.icon + '</span>' +
+        '<span><span class="tip-title">' + t.title + '</span><span class="tip-text">' + t.text + '</span></span>';
+      list.appendChild(row);
+    });
+  }
+
+  // ---------- top-level render ----------
+
+  function renderAll() {
+    document.getElementById('weekLabel').textContent = formatWeekLabel(state.weekStart);
+    document.getElementById('weekPicker').value = state.weekStart;
+    document.getElementById('adjustCaption').textContent = 'For the week of ' + formatWeekLabel(state.weekStart).replace('This week · ', '');
+    document.getElementById('notes').value = state.notes || '';
+
+    renderChart(state.hours);
+    var stats = weekStats(state.hours);
+    renderStats(stats);
+    renderTrend(stats, state.prevWeekAvg);
+    renderTips(state.hours);
+  }
+
+  async function refreshTrend() {
+    var prevWeekStart = addDays(state.weekStart, -7);
+    var ownerWeek = state.weekStart;
+    var prevWeek = await loadWeek(prevWeekStart);
+    if (state.weekStart !== ownerWeek) return;
+    state.prevWeekAvg = weekStats(prevWeek.hours).avgHours;
+    renderTrend(weekStats(state.hours), state.prevWeekAvg);
   }
 
   // ---------- events ----------
 
-  function scheduleSave() {
-    saveDay(state.date, state.day);
-  }
-
-  ['napStart', 'napEnd'].forEach(function (id) {
-    document.getElementById(id).addEventListener('change', function () {
-      state.day[id] = this.value;
-      renderCompare();
-      scheduleSave();
-    });
-  });
-
-  document.getElementById('addSegment').addEventListener('click', function () {
-    state.day.mainSegments.push({ start: '', end: '' });
-    renderMainSegments();
-    renderCompare();
-    scheduleSave();
-  });
-
-  document.getElementById('saveAdjust').addEventListener('click', function () {
-    state.day.adjustments = document.getElementById('adjustments').value;
-    scheduleSave();
+  document.getElementById('saveNotes').addEventListener('click', function () {
+    state.notes = document.getElementById('notes').value;
+    saveWeekNotes(state.weekStart, state.notes);
     var msg = document.getElementById('savedMsg');
     msg.classList.add('show');
     setTimeout(function () { msg.classList.remove('show'); }, 1800);
   });
 
-  document.getElementById('prevDay').addEventListener('click', function () { goToDate(addDays(state.date, -1)); });
-  document.getElementById('nextDay').addEventListener('click', function () { goToDate(addDays(state.date, 1)); });
-  document.getElementById('jumpToday').addEventListener('click', function () { goToDate(todayStr()); });
-  document.getElementById('dateLabel').addEventListener('click', function () { document.getElementById('datePicker').showPicker && document.getElementById('datePicker').showPicker(); });
-  document.getElementById('datePicker').addEventListener('change', function () {
-    if (this.value) goToDate(this.value);
+  document.getElementById('prevWeek').addEventListener('click', function () { goToWeek(addDays(state.weekStart, -7)); });
+  document.getElementById('nextWeek').addEventListener('click', function () { goToWeek(addDays(state.weekStart, 7)); });
+  document.getElementById('jumpWeek').addEventListener('click', function () { goToWeek(mondayOf(todayStr())); });
+  document.getElementById('weekLabel').addEventListener('click', function () { document.getElementById('weekPicker').showPicker && document.getElementById('weekPicker').showPicker(); });
+  document.getElementById('weekPicker').addEventListener('change', function () {
+    if (this.value) goToWeek(mondayOf(this.value));
   });
 
-  var loadGen = 0;
-
-  async function goToDate(newDate) {
+  async function goToWeek(newWeekStart) {
     var myGen = ++loadGen;
-    var loaded = await loadDay(newDate);
-    if (myGen !== loadGen) return; // a newer navigation already took over
-    state.date = newDate;
-    state.day = loaded;
-    renderDateBar();
-    renderFields();
-    renderCompare();
-    renderPrevScore();
+    var loaded = await loadWeek(newWeekStart);
+    if (myGen !== loadGen) return;
+    state.weekStart = newWeekStart;
+    state.hours = loaded.hours;
+    state.notes = loaded.notes;
+    state.prevWeekAvg = null;
+    renderAll();
+    renderEntryGrid(state.weekStart, state.hours);
+    refreshTrend();
   }
 
   async function boot() {
-    renderPlanLabels();
     var myGen = ++loadGen;
-    var loaded = await loadDay(state.date);
+    var loaded = await loadWeek(state.weekStart);
     if (myGen !== loadGen) return;
-    state.day = loaded;
-    renderDateBar();
-    renderFields();
-    renderCompare();
-    renderPrevScore();
+    state.hours = loaded.hours;
+    state.notes = loaded.notes;
+    renderAll();
+    renderEntryGrid(state.weekStart, state.hours);
+    refreshTrend();
   }
 
   boot();
