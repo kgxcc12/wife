@@ -1,21 +1,22 @@
 <title>Sleep Regulation Plan</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap');
 
   :root {
-    --bg: #FFF8E9;
-    --surface: #FFFFFF;
-    --surface-soft: #FFF3D3;
-    --border: #F1DFAE;
-    --ink: #2E2013;
-    --ink-soft: #8A7857;
+    color-scheme: dark;
+    --bg: #15120B;
+    --surface: #211B12;
+    --surface-soft: #2C2416;
+    --border: #3C311F;
+    --ink: #FBF2DE;
+    --ink-soft: #AC9C7C;
     --yellow: #FFC72C;
-    --yellow-deep: #EE9F00;
-    --red: #E4572E;
-    --success: #3FA76B;
-    --warning: #E8A33D;
-    --critical: #D6503F;
-    --shadow: rgba(58, 41, 15, 0.10);
+    --yellow-deep: #F0A500;
+    --red: #FF6B49;
+    --success: #57C98A;
+    --warning: #F0B94D;
+    --critical: #FF7A63;
+    --shadow: rgba(0, 0, 0, 0.45);
   }
 
   * { box-sizing: border-box; }
@@ -23,12 +24,13 @@
   body {
     background: var(--bg);
     color: var(--ink);
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, .num {
-    font-family: 'Baloo 2', 'Nunito', sans-serif;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
   }
 
   .page {
@@ -253,9 +255,9 @@
     color: var(--ink-soft);
     white-space: nowrap;
   }
-  .delta-pill.good { background: rgba(63,167,107,0.15); color: var(--success); }
-  .delta-pill.warn { background: rgba(232,163,61,0.18); color: #9a6a12; }
-  .delta-pill.bad  { background: rgba(214,80,63,0.15); color: var(--critical); }
+  .delta-pill.good { background: rgba(87,201,138,0.18); color: var(--success); }
+  .delta-pill.warn { background: rgba(240,185,77,0.18); color: var(--warning); }
+  .delta-pill.bad  { background: rgba(255,122,99,0.18); color: var(--critical); }
 
   .plan-row {
     display: flex;
@@ -287,7 +289,7 @@
   }
 
   .time-field input[type="time"] {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Inter Tight', sans-serif;
     font-size: 1rem;
     font-weight: 700;
     color: var(--ink);
@@ -405,7 +407,7 @@
     width: 100%;
     min-height: 92px;
     resize: vertical;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Inter Tight', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     color: var(--ink);
@@ -518,7 +520,7 @@
     </div>
     <div class="titles">
       <h1>Sleep Regulation Plan</h1>
-      <p class="tag">baby ko :) &nbsp;⚡</p>
+      <p class="tag">For my baby, Cherish 💛</p>
     </div>
   </div>
 
@@ -565,7 +567,20 @@
     <div class="compare-card">
       <div class="ccard-head">
         <div class="ccard-title">
-          <span class="icon">☕</span>
+          <span class="icon">
+            <svg width="20" height="20" viewBox="0 0 100 100" aria-hidden="true">
+              <path d="M30 30 C20 18 14 10 11 5 C13 16 17 27 24 35 Z" fill="#3A2A0E"/>
+              <path d="M30 32 C23 22 19 13 17 8 C18 17 21 26 26 33 Z" fill="#FFC72C"/>
+              <path d="M70 28 C80 15 86 7 89 2 C87 13 83 24 76 33 Z" fill="#3A2A0E"/>
+              <path d="M70 30 C77 20 81 12 83 7 C81 16 78 25 74 31 Z" fill="#FFC72C"/>
+              <circle cx="50" cy="56" r="35" fill="#FFC72C"/>
+              <circle cx="26" cy="62" r="9" fill="#F4795A" opacity="0.8"/>
+              <circle cx="74" cy="62" r="9" fill="#F4795A" opacity="0.8"/>
+              <path d="M36 55 Q40.5 50 45 55" stroke="#2E2013" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+              <path d="M55 55 Q59.5 50 64 55" stroke="#2E2013" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+              <path d="M45 68 Q50 72 55 68" stroke="#2E2013" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            </svg>
+          </span>
           <h3>Power nap</h3>
         </div>
         <span class="delta-pill" id="napDelta">--</span>
