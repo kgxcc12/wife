@@ -13,7 +13,6 @@
     --yellow: #FFC72C;
     --yellow-deep: #F0A500;
     --good: #2FB463;
-    --short: #FF8A5B;
     --warning: #FF9F0A;
     --critical: #FF3B30;
     --shadow: rgba(28, 28, 30, 0.06);
@@ -34,7 +33,7 @@
   }
 
   .page {
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -78,6 +77,31 @@
     .header h1 { font-size: 1.22rem; }
     .mascot svg { width: 48px; height: 48px; }
   }
+
+  /* ---------- plan strip ---------- */
+  .plan-strip {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .plan-chip {
+    flex: 1;
+    min-width: 220px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 1px 2px var(--shadow);
+  }
+
+  .plan-chip .pc-icon { font-size: 1.15rem; }
+
+  .plan-chip .pc-text { font-size: 0.78rem; font-weight: 700; color: var(--ink-soft); line-height: 1.35; }
+  .plan-chip .pc-text b { color: var(--ink); font-weight: 800; }
 
   /* ---------- week nav ---------- */
   .weekbar {
@@ -148,7 +172,7 @@
     gap: 10px;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 680px) {
     .stat-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
@@ -203,6 +227,13 @@
     gap: 6px;
   }
 
+  .card .card-cap {
+    margin: 0 0 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
   /* ---------- chart + gauge row ---------- */
   .chart-row {
     display: grid;
@@ -211,7 +242,7 @@
     align-items: stretch;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 680px) {
     .chart-row { grid-template-columns: 1fr; }
   }
 
@@ -224,64 +255,11 @@
 
   .chart-wrap svg { display: block; width: 100%; height: auto; }
 
-  .entry-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    margin-top: 6px;
-  }
-
-  .entry-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-  }
-
-  .entry-col .day-name {
-    font-size: 0.72rem;
-    font-weight: 800;
-    color: var(--ink);
-  }
-
-  .entry-col .day-date {
-    font-size: 0.62rem;
-    font-weight: 600;
-    color: var(--ink-soft);
-    margin-bottom: 2px;
-  }
-
-  .entry-col input {
-    width: 100%;
-    max-width: 46px;
-    text-align: center;
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 0.92rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    color: var(--ink);
-    background: var(--surface-soft);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 7px 2px;
-    -moz-appearance: textfield;
-  }
-  .entry-col input::-webkit-outer-spin-button,
-  .entry-col input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  .entry-col input:focus {
-    outline: none;
-    border-color: var(--yellow-deep);
-    background: var(--surface);
-  }
-
   .chart-legend {
     display: flex;
     justify-content: center;
     gap: 18px;
-    margin-top: 14px;
+    margin-top: 10px;
     font-size: 0.76rem;
     font-weight: 700;
     color: var(--ink-soft);
@@ -291,7 +269,8 @@
 
   .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
   .dot.good { background: var(--good); }
-  .dot.short { background: var(--short); }
+  .dot.warning { background: var(--warning); }
+  .dot.critical { background: var(--critical); }
 
   /* ---------- gauge card ---------- */
   .gauge-card {
@@ -325,7 +304,7 @@
   .gauge span {
     position: relative;
     font-family: 'Inter Tight', sans-serif;
-    font-size: 1.55rem;
+    font-size: 1.5rem;
     font-weight: 800;
   }
 
@@ -336,6 +315,69 @@
     color: var(--ink-soft);
   }
 
+  /* ---------- entry table ---------- */
+  .table-wrap {
+    overflow-x: auto;
+    margin-top: 4px;
+    border-radius: 12px;
+  }
+
+  .entry-table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 620px;
+  }
+
+  .entry-table th, .entry-table td {
+    padding: 8px 6px;
+    text-align: center;
+  }
+
+  .entry-table thead th {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding-bottom: 6px;
+  }
+
+  .entry-table thead th .th-date { display: block; font-size: 0.62rem; font-weight: 600; text-transform: none; margin-top: 1px; }
+
+  .entry-table tbody th {
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--ink);
+    white-space: nowrap;
+    position: sticky;
+    left: 0;
+    background: var(--surface);
+    padding-right: 10px;
+  }
+
+  .entry-table tbody tr + tr th,
+  .entry-table tbody tr + tr td { border-top: 1px solid var(--border); }
+
+  .entry-table input[type="time"] {
+    width: 100%;
+    min-width: 78px;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 7px 4px;
+    text-align: center;
+  }
+  .entry-table input[type="time"]:focus {
+    outline: none;
+    border-color: var(--yellow-deep);
+    background: var(--surface);
+  }
+
   /* ---------- insight cards ---------- */
   .insight-row {
     display: grid;
@@ -343,7 +385,7 @@
     gap: 12px;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 680px) {
     .insight-row { grid-template-columns: 1fr; }
   }
 
@@ -484,6 +526,17 @@
     </div>
   </div>
 
+  <div class="plan-strip">
+    <div class="plan-chip">
+      <span class="pc-icon">🌙</span>
+      <span class="pc-text">Main sleep plan<br><b>3:30 AM → 10:30 AM</b></span>
+    </div>
+    <div class="plan-chip">
+      <span class="pc-icon">☕</span>
+      <span class="pc-text">Power nap plan<br><b>1:30 PM → 3:30 PM</b> · before her 4 PM meetings</span>
+    </div>
+  </div>
+
   <div class="weekbar">
     <button class="nav" id="prevWeek" aria-label="Previous week">‹</button>
     <div class="weeklabel" id="weekLabel">This week</div>
@@ -499,41 +552,55 @@
       <div class="stat-caption">this week</div>
     </div>
     <div class="stat-card">
+      <div class="stat-top"><span>🎯</span><span>Weekly adherence</span></div>
+      <div class="stat-value" id="statScore">--</div>
+      <div class="stat-caption">avg daily score</div>
+    </div>
+    <div class="stat-card">
       <div class="stat-top"><span>🌙</span><span>Total hours slept</span></div>
-      <div class="stat-value" id="statTotal">0h</div>
-      <div class="stat-caption" id="statTotalCap">of 63h goal</div>
+      <div class="stat-value" id="statHours">0h</div>
+      <div class="stat-caption" id="statHoursCap">of 63h goal</div>
     </div>
     <div class="stat-card">
-      <div class="stat-top"><span>⏳</span><span>Hours short of goal</span></div>
-      <div class="stat-value" id="statShort">0h</div>
-      <div class="stat-caption" id="statShortCap">0 nights under goal</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-top"><span>📊</span><span>Avg per night</span></div>
-      <div class="stat-value" id="statAvg">--</div>
-      <div class="stat-caption">goal is 9h</div>
+      <div class="stat-top"><span>⚡</span><span>Nights on schedule</span></div>
+      <div class="stat-value" id="statOnSchedule">0/7</div>
+      <div class="stat-caption">score 90+</div>
     </div>
   </div>
 
   <div class="chart-row">
     <div class="card chart-card">
-      <h2>Hours slept vs. goal</h2>
+      <h2>Schedule adherence, per night</h2>
+      <p class="card-cap">100 = every planned time hit exactly</p>
       <div class="chart-wrap">
         <svg id="chartSvg" viewBox="0 0 700 220" preserveAspectRatio="none" aria-hidden="true"></svg>
       </div>
-      <div class="entry-grid" id="entryGrid"></div>
       <div class="chart-legend">
-        <span><i class="dot good"></i> Hours slept</span>
-        <span><i class="dot short"></i> Short of goal</span>
+        <span><i class="dot good"></i> On track (70+)</span>
+        <span><i class="dot warning"></i> A bit off (50-69)</span>
+        <span><i class="dot critical"></i> Way off (&lt;50)</span>
       </div>
     </div>
 
     <div class="card gauge-card">
-      <h2>Weekly consistency</h2>
+      <h2>On-schedule rate</h2>
       <div class="gauge" id="gaugeRing" style="--pct:0;">
         <span id="gaugeValue">--</span>
       </div>
       <p class="gauge-cap" id="gaugeCaption">Log a few nights to see this.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Log her times</h2>
+    <p class="card-cap">Bedtime, wake time, and nap window for each night</p>
+    <div class="table-wrap">
+      <table class="entry-table">
+        <thead>
+          <tr id="tableHead"><th></th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
     </div>
   </div>
 
@@ -564,11 +631,20 @@
 
 <script>
 (function () {
-  var DAILY_GOAL = 9; // 7h main sleep (3:30-10:30am) + 2h power nap (1:30-3:30pm)
-  var WEEKLY_GOAL = DAILY_GOAL * 7;
+  var PLAN = {
+    mainStart: '03:30', mainEnd: '10:30',
+    napStart: '13:30', napEnd: '15:30'
+  };
+  var WEEKLY_HOURS_GOAL = 63; // 7h main + 2h nap, x7 nights
   var DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  var LS_DAYS_KEY = 'pika-sleep-days-v2';
-  var LS_WEEKS_KEY = 'pika-sleep-weeks-v2';
+  var CHECKPOINTS = [
+    { key: 'mainStart', label: 'Bedtime', plan: PLAN.mainStart },
+    { key: 'mainEnd', label: 'Wake time', plan: PLAN.mainEnd },
+    { key: 'napStart', label: 'Nap start', plan: PLAN.napStart },
+    { key: 'napEnd', label: 'Nap end', plan: PLAN.napEnd }
+  ];
+  var LS_DAYS_KEY = 'pika-sleep-days-v3';
+  var LS_WEEKS_KEY = 'pika-sleep-weeks-v3';
 
   var db = null;
   var dbChecked = false;
@@ -576,10 +652,16 @@
 
   var state = {
     weekStart: mondayOf(todayStr()),
-    hours: [null, null, null, null, null, null, null],
+    days: emptyWeekDays(),
     notes: '',
     prevWeekAvg: null
   };
+
+  function emptyWeekDays() {
+    var out = [];
+    for (var i = 0; i < 7; i++) out.push({ mainStart: '', mainEnd: '', napStart: '', napEnd: '' });
+    return out;
+  }
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
@@ -598,7 +680,7 @@
   function mondayOf(dateStr) {
     var p = dateStr.split('-').map(Number);
     var d = new Date(p[0], p[1] - 1, p[2]);
-    var offset = (d.getDay() + 6) % 7; // days since Monday
+    var offset = (d.getDay() + 6) % 7;
     d.setDate(d.getDate() - offset);
     return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
   }
@@ -615,16 +697,34 @@
     return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
   }
 
-  function dayNum(dateStr) {
-    return Number(dateStr.split('-')[2]);
-  }
+  function dayNum(dateStr) { return Number(dateStr.split('-')[2]); }
 
   function formatWeekLabel(weekStart) {
-    var end = addDays(weekStart, 6);
-    var startLabel = shortDate(weekStart);
-    var endLabel = shortDate(end);
-    var label = startLabel + ' – ' + endLabel;
+    var label = shortDate(weekStart) + ' – ' + shortDate(addDays(weekStart, 6));
     return weekStart === mondayOf(todayStr()) ? 'This week · ' + label : label;
+  }
+
+  function toMinutes(str) {
+    if (!str) return null;
+    var p = str.split(':').map(Number);
+    return p[0] * 60 + p[1];
+  }
+
+  function duration(startStr, endStr) {
+    var s = toMinutes(startStr), e = toMinutes(endStr);
+    if (s === null || e === null) return null;
+    var d = e - s;
+    if (d < 0) d += 1440;
+    return d;
+  }
+
+  function deltaMinutes(actualStr, planStr) {
+    var a = toMinutes(actualStr), p = toMinutes(planStr);
+    if (a === null || p === null) return null;
+    var d = a - p;
+    if (d > 720) d -= 1440;
+    if (d < -720) d += 1440;
+    return d;
   }
 
   function fmtHours(n) {
@@ -633,9 +733,54 @@
     return (Math.abs(r % 1) < 0.05 ? r.toFixed(0) : r.toFixed(1)) + 'h';
   }
 
+  function fmtMins(n) {
+    if (n === null || n === undefined) return '--';
+    return Math.round(n) + 'm';
+  }
+
+  function fmtTime12(str) {
+    if (!str) return '--';
+    var p = str.split(':').map(Number);
+    var h = p[0], m = p[1];
+    var ap = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12; if (h12 === 0) h12 = 12;
+    return h12 + ':' + (m < 10 ? '0' + m : m) + ' ' + ap;
+  }
+
   function avg(arr) {
     if (arr.length === 0) return null;
     return arr.reduce(function (a, b) { return a + b; }, 0) / arr.length;
+  }
+
+  // ---------- scoring ----------
+
+  function dayDeltas(day) {
+    return CHECKPOINTS.map(function (c) { return deltaMinutes(day[c.key], c.plan); });
+  }
+
+  function dayHours(day) {
+    var mainDur = duration(day.mainStart, day.mainEnd);
+    var napDur = duration(day.napStart, day.napEnd);
+    if (mainDur === null && napDur === null) return null;
+    return ((mainDur || 0) + (napDur || 0)) / 60;
+  }
+
+  function computeScore(deltas) {
+    var entered = deltas.filter(function (d) { return d !== null; });
+    if (entered.length === 0) return null;
+    var pointsPerField = 25, tolerance = 90, sum = 0;
+    entered.forEach(function (d) {
+      var abs = Math.min(tolerance, Math.abs(d));
+      sum += pointsPerField * (1 - abs / tolerance);
+    });
+    return Math.round(sum / (pointsPerField * entered.length) * 100);
+  }
+
+  function scoreTier(score) {
+    if (score === null) return { color: 'var(--border)', label: 'No log' };
+    if (score >= 70) return { color: 'var(--good)', label: 'On track' };
+    if (score >= 50) return { color: 'var(--warning)', label: 'A bit off' };
+    return { color: 'var(--critical)', label: 'Way off' };
   }
 
   // ---------- storage ----------
@@ -647,9 +792,7 @@
       if (window.claude && typeof window.claude.use === 'function') {
         db = await window.claude.use('db');
       }
-    } catch (e) {
-      db = null;
-    }
+    } catch (e) { db = null; }
     document.getElementById('storageNote').textContent = db
       ? 'Synced ⚡ your entries are saved automatically'
       : 'Saved on this device only';
@@ -659,15 +802,14 @@
   function readLocalDay(date) {
     try {
       var all = JSON.parse(localStorage.getItem(LS_DAYS_KEY) || '{}');
-      var d = all[date];
-      return d && typeof d.hours === 'number' ? d.hours : null;
+      return all[date] || null;
     } catch (e) { return null; }
   }
 
-  function writeLocalDay(date, hours) {
+  function writeLocalDay(date, day) {
     try {
       var all = JSON.parse(localStorage.getItem(LS_DAYS_KEY) || '{}');
-      all[date] = { hours: hours };
+      all[date] = day;
       localStorage.setItem(LS_DAYS_KEY, JSON.stringify(all));
     } catch (e) {}
   }
@@ -688,31 +830,30 @@
     } catch (e) {}
   }
 
-  async function loadDayHours(date) {
+  function normalizeDay(d) {
+    d = d || {};
+    return { mainStart: d.mainStart || '', mainEnd: d.mainEnd || '', napStart: d.napStart || '', napEnd: d.napEnd || '' };
+  }
+
+  async function loadDay(date) {
     var database = await getDb();
     if (database) {
       try {
         var snap = await database.doc('days/' + date).get();
-        if (!snap.exists) return null;
-        var d = snap.data();
-        if (typeof d.hours === 'number') return d.hours;
-        return null;
+        return snap.exists ? normalizeDay(snap.data()) : normalizeDay(null);
       } catch (e) {
-        return readLocalDay(date);
+        return normalizeDay(readLocalDay(date));
       }
     }
-    return readLocalDay(date);
+    return normalizeDay(readLocalDay(date));
   }
 
-  async function saveDayHours(date, hours) {
+  async function saveDay(date, day) {
     var database = await getDb();
     if (database) {
-      try {
-        await database.doc('days/' + date).set({ hours: hours });
-        return;
-      } catch (e) {}
+      try { await database.doc('days/' + date).set(day); return; } catch (e) {}
     }
-    writeLocalDay(date, hours);
+    writeLocalDay(date, day);
   }
 
   async function loadWeekNotes(weekStart) {
@@ -721,9 +862,7 @@
       try {
         var snap = await database.doc('weeks/' + weekStart).get();
         return snap.exists && typeof snap.data().notes === 'string' ? snap.data().notes : '';
-      } catch (e) {
-        return readLocalWeek(weekStart);
-      }
+      } catch (e) { return readLocalWeek(weekStart); }
     }
     return readLocalWeek(weekStart);
   }
@@ -731,143 +870,117 @@
   async function saveWeekNotes(weekStart, notes) {
     var database = await getDb();
     if (database) {
-      try {
-        await database.doc('weeks/' + weekStart).set({ notes: notes });
-        return;
-      } catch (e) {}
+      try { await database.doc('weeks/' + weekStart).set({ notes: notes }); return; } catch (e) {}
     }
     writeLocalWeek(weekStart, notes);
   }
 
   async function loadWeek(weekStart) {
     var dates = weekDates(weekStart);
-    var hours = await Promise.all(dates.map(loadDayHours));
+    var days = await Promise.all(dates.map(loadDay));
     var notes = await loadWeekNotes(weekStart);
-    return { hours: hours, notes: notes };
+    return { days: days, notes: notes };
   }
 
   // ---------- stats ----------
 
-  function weekStats(hours) {
-    var logged = hours.filter(function (h) { return h !== null; });
-    var daysLogged = logged.length;
-    var totalHours = logged.reduce(function (a, b) { return a + b; }, 0);
-    var shortfallTotal = logged.reduce(function (s, h) { return s + Math.max(0, DAILY_GOAL - h); }, 0);
-    var shortfallDays = logged.filter(function (h) { return h < DAILY_GOAL; }).length;
+  function weekStats(days) {
+    var scores = days.map(function (d) { return computeScore(dayDeltas(d)); });
+    var loggedScores = scores.filter(function (s) { return s !== null; });
+    var hours = days.map(dayHours);
+    var loggedHours = hours.filter(function (h) { return h !== null; });
     return {
-      daysLogged: daysLogged,
-      totalHours: totalHours,
-      shortfallTotal: shortfallTotal,
-      shortfallDays: shortfallDays,
-      avgHours: daysLogged ? totalHours / daysLogged : null
+      scores: scores,
+      daysLogged: loggedScores.length,
+      avgScore: loggedScores.length ? Math.round(avg(loggedScores)) : null,
+      onScheduleDays: loggedScores.filter(function (s) { return s >= 90; }).length,
+      totalHours: loggedHours.reduce(function (a, b) { return a + b; }, 0),
+      hoursLoggedDays: loggedHours.length
     };
   }
 
   // ---------- chart ----------
 
-  function renderChart(hours) {
-    var W = 700, H = 220, BASE_Y = 190, TOP_PAD = 26;
-    var COL_W = W / 7, BAR_W = 24, PAIR_GAP = 6;
+  function renderChart(days) {
+    var W = 700, H = 220, BASE_Y = 190, TOP_PAD = 26, COL_W = W / 7, BAR_W = 34;
     var plotH = BASE_Y - TOP_PAD;
-
-    var validHours = hours.filter(function (h) { return h !== null; });
-    var rawMax = Math.max(DAILY_GOAL + 2, validHours.length ? Math.max.apply(null, validHours) + 1 : 0);
-    var domainMax = Math.ceil(rawMax / 3) * 3;
-
-    function scale(h) { return (h / domainMax) * plotH; }
+    function scaleScore(s) { return (s / 100) * plotH; }
 
     var svg = '';
     svg += '<line x1="0" y1="' + BASE_Y + '" x2="' + W + '" y2="' + BASE_Y + '" stroke="var(--border)" stroke-width="1.5"/>';
 
-    for (var v = 3; v <= domainMax; v += 3) {
-      var gy = BASE_Y - scale(v);
-      var isGoal = v === DAILY_GOAL;
-      svg += '<line x1="0" y1="' + gy + '" x2="' + W + '" y2="' + gy + '" stroke="' + (isGoal ? 'var(--yellow-deep)' : 'var(--border)') + '" stroke-width="' + (isGoal ? 1.6 : 1) + '" stroke-dasharray="' + (isGoal ? '5,4' : '2,4') + '" opacity="' + (isGoal ? '0.9' : '0.7') + '"/>';
-      svg += '<text x="' + (W - 4) + '" y="' + (gy - 5) + '" text-anchor="end" font-size="11" font-weight="700" fill="' + (isGoal ? 'var(--yellow-deep)' : 'var(--ink-soft)') + '" font-family="Inter Tight, sans-serif">' + (isGoal ? 'Goal · 9h' : v + 'h') + '</text>';
-    }
+    [50, 90].forEach(function (v) {
+      var gy = BASE_Y - scaleScore(v);
+      var isGoal = v === 90;
+      svg += '<line x1="0" y1="' + gy + '" x2="' + W + '" y2="' + gy + '" stroke="' + (isGoal ? 'var(--yellow-deep)' : 'var(--border)') + '" stroke-width="' + (isGoal ? 1.6 : 1) + '" stroke-dasharray="' + (isGoal ? '5,4' : '2,4') + '" opacity="0.85"/>';
+      svg += '<text x="' + (W - 4) + '" y="' + (gy - 5) + '" text-anchor="end" font-size="11" font-weight="700" fill="' + (isGoal ? 'var(--yellow-deep)' : 'var(--ink-soft)') + '" font-family="Inter Tight, sans-serif">' + (isGoal ? 'Great · 90' : v) + '</text>';
+    });
 
-    for (var i = 0; i < 7; i++) {
+    days.forEach(function (day, i) {
       var cx = i * COL_W + COL_W / 2;
-      var h = hours[i];
-      if (h === null) {
+      var score = computeScore(dayDeltas(day));
+      if (score === null) {
         svg += '<rect x="' + (cx - 7) + '" y="' + (BASE_Y - 4) + '" width="14" height="4" rx="2" fill="var(--border)"/>';
-        continue;
+        return;
       }
-      var actual = Math.min(h, domainMax);
-      var short = Math.max(0, DAILY_GOAL - h);
-      var actualX = cx - BAR_W - PAIR_GAP / 2;
-      var shortX = cx + PAIR_GAP / 2;
-
-      var aH = scale(actual), aY = BASE_Y - aH;
-      svg += '<rect x="' + actualX + '" y="' + aY + '" width="' + BAR_W + '" height="' + aH + '" rx="6" fill="var(--good)"/>';
-
-      if (short > 0) {
-        var sH = scale(Math.min(short, domainMax)), sY = BASE_Y - sH;
-        svg += '<rect x="' + shortX + '" y="' + sY + '" width="' + BAR_W + '" height="' + sH + '" rx="6" fill="var(--short)"/>';
-      }
-    }
+      var tier = scoreTier(score);
+      var h = scaleScore(score), y = BASE_Y - h;
+      svg += '<rect x="' + (cx - BAR_W / 2) + '" y="' + y + '" width="' + BAR_W + '" height="' + h + '" rx="7" fill="' + tier.color + '"/>';
+      svg += '<text x="' + cx + '" y="' + (y - 6) + '" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)" font-family="Inter Tight, sans-serif">' + score + '</text>';
+    });
 
     document.getElementById('chartSvg').innerHTML = svg;
   }
 
-  // ---------- entry grid ----------
+  // ---------- entry table ----------
 
-  function renderEntryGrid(weekStart, hours) {
+  function buildTable(weekStart) {
     var dates = weekDates(weekStart);
-    var container = document.getElementById('entryGrid');
-    container.innerHTML = '';
+    var head = document.getElementById('tableHead');
+    head.innerHTML = '<th></th>';
     dates.forEach(function (date, i) {
-      var col = document.createElement('div');
-      col.className = 'entry-col';
+      var th = document.createElement('th');
+      th.innerHTML = DAY_NAMES[i] + '<span class="th-date">' + dayNum(date) + '</span>';
+      head.appendChild(th);
+    });
 
-      var name = document.createElement('span');
-      name.className = 'day-name';
-      name.textContent = DAY_NAMES[i];
+    var body = document.getElementById('tableBody');
+    body.innerHTML = '';
+    CHECKPOINTS.forEach(function (cp) {
+      var row = document.createElement('tr');
+      var rowLabel = document.createElement('th');
+      rowLabel.textContent = cp.label;
+      row.appendChild(rowLabel);
 
-      var dnum = document.createElement('span');
-      dnum.className = 'day-date';
-      dnum.textContent = dayNum(date);
-
-      var input = document.createElement('input');
-      input.type = 'number';
-      input.step = '0.5';
-      input.min = '0';
-      input.max = '14';
-      input.inputMode = 'decimal';
-      input.placeholder = '–';
-      input.value = hours[i] === null ? '' : hours[i];
-      input.setAttribute('aria-label', DAY_NAMES[i] + ' hours slept');
-
-      input.addEventListener('input', function () {
-        var v = this.value.trim();
-        state.hours[i] = v === '' ? null : Math.max(0, Math.min(14, parseFloat(v)));
-        renderAll();
+      dates.forEach(function (date, i) {
+        var td = document.createElement('td');
+        var input = document.createElement('input');
+        input.type = 'time';
+        input.value = state.days[i][cp.key] || '';
+        input.setAttribute('aria-label', cp.label + ' ' + DAY_NAMES[i]);
+        input.addEventListener('change', function () {
+          var ownerWeek = weekStart;
+          state.days[i][cp.key] = this.value;
+          renderAll();
+          if (state.weekStart === ownerWeek) saveDay(date, state.days[i]);
+        });
+        td.appendChild(input);
+        row.appendChild(td);
       });
-      input.addEventListener('change', function () {
-        var ownerWeek = weekStart;
-        var date2 = date;
-        var val = state.hours[i];
-        if (state.weekStart === ownerWeek) saveDayHours(date2, val);
-      });
-
-      col.appendChild(name);
-      col.appendChild(dnum);
-      col.appendChild(input);
-      container.appendChild(col);
+      body.appendChild(row);
     });
   }
 
-  // ---------- stat cards + gauge ----------
+  // ---------- stats + gauge ----------
 
   function renderStats(stats) {
     document.getElementById('statDays').textContent = stats.daysLogged + '/7';
-    document.getElementById('statTotal').textContent = fmtHours(stats.totalHours);
-    document.getElementById('statTotalCap').textContent = 'of ' + WEEKLY_GOAL + 'h goal';
-    document.getElementById('statShort').textContent = fmtHours(stats.shortfallTotal);
-    document.getElementById('statShortCap').textContent = stats.shortfallDays + (stats.shortfallDays === 1 ? ' night' : ' nights') + ' under goal';
-    document.getElementById('statAvg').textContent = stats.avgHours === null ? '--' : fmtHours(stats.avgHours);
+    document.getElementById('statScore').textContent = stats.avgScore === null ? '--' : stats.avgScore;
+    document.getElementById('statHours').textContent = fmtHours(stats.totalHours);
+    document.getElementById('statHoursCap').textContent = 'of ' + WEEKLY_HOURS_GOAL + 'h goal';
+    document.getElementById('statOnSchedule').textContent = stats.onScheduleDays + '/7';
 
-    var pct = Math.round((stats.totalHours / WEEKLY_GOAL) * 100);
+    var pct = stats.daysLogged ? Math.round((stats.onScheduleDays / stats.daysLogged) * 100) : 0;
     var ring = document.getElementById('gaugeRing');
     var val = document.getElementById('gaugeValue');
     var cap = document.getElementById('gaugeCaption');
@@ -881,75 +994,69 @@
     }
 
     var color = 'var(--critical)';
-    if (pct >= 90) color = 'var(--good)';
-    else if (pct >= 70) color = 'var(--yellow-deep)';
-    else if (pct >= 50) color = 'var(--warning)';
+    if (pct >= 70) color = 'var(--good)';
+    else if (pct >= 40) color = 'var(--warning)';
 
-    ring.style.setProperty('--pct', Math.min(100, pct));
+    ring.style.setProperty('--pct', pct);
     ring.style.setProperty('--gauge-color', color);
     val.textContent = pct + '%';
-    cap.textContent = fmtHours(stats.totalHours) + ' logged of ' + WEEKLY_GOAL + 'h this week';
+    cap.textContent = stats.onScheduleDays + ' of ' + stats.daysLogged + ' logged nights scored 90+';
   }
 
   // ---------- insights ----------
 
   function renderTrend(stats, prevAvg) {
     var el = document.getElementById('trendText');
-    if (stats.avgHours === null) {
-      el.textContent = "Log a few nights to see her trend.";
-      return;
-    }
+    if (stats.avgScore === null) { el.textContent = 'Log a few nights to see her trend.'; return; }
     if (prevAvg === null) {
-      el.textContent = 'Averaging ' + fmtHours(stats.avgHours) + ' a night across ' + stats.daysLogged + (stats.daysLogged === 1 ? ' night' : ' nights') + ' logged this week.';
+      el.textContent = 'Averaging a score of ' + stats.avgScore + ' across ' + stats.daysLogged + (stats.daysLogged === 1 ? ' night' : ' nights') + ' logged this week.';
       return;
     }
-    var diff = Math.round((stats.avgHours - prevAvg) * 10) / 10;
-    if (Math.abs(diff) < 0.15) {
-      el.textContent = 'Averaging ' + fmtHours(stats.avgHours) + ' a night, about the same as last week.';
+    var diff = Math.round(stats.avgScore - prevAvg);
+    if (Math.abs(diff) < 2) {
+      el.textContent = 'Averaging a score of ' + stats.avgScore + ', about the same as last week.';
     } else if (diff > 0) {
-      el.textContent = 'Averaging ' + fmtHours(stats.avgHours) + ' a night, up ' + fmtHours(Math.abs(diff)) + ' from last week.';
+      el.textContent = 'Averaging a score of ' + stats.avgScore + ', up ' + diff + ' points from last week — the schedule is sticking better.';
     } else {
-      el.textContent = 'Averaging ' + fmtHours(stats.avgHours) + ' a night, down ' + fmtHours(Math.abs(diff)) + ' from last week.';
+      el.textContent = 'Averaging a score of ' + stats.avgScore + ', down ' + Math.abs(diff) + ' points from last week.';
     }
   }
 
-  function renderTips(hours) {
+  function renderTips(days) {
     var tips = [];
 
-    var worstIdx = -1, worstDeficit = 0.9;
-    hours.forEach(function (h, i) {
-      if (h === null) return;
-      var d = DAILY_GOAL - h;
-      if (d > worstDeficit) { worstDeficit = d; worstIdx = i; }
+    var worst = null;
+    days.forEach(function (day, i) {
+      CHECKPOINTS.forEach(function (cp) {
+        var d = deltaMinutes(day[cp.key], cp.plan);
+        if (d === null) return;
+        if (!worst || Math.abs(d) > Math.abs(worst.delta)) {
+          worst = { dayIdx: i, cp: cp, delta: d, actual: day[cp.key] };
+        }
+      });
     });
-    if (worstIdx >= 0) {
+    if (worst && Math.abs(worst.delta) >= 20) {
+      var dir = worst.delta > 0 ? 'later' : 'earlier';
       tips.push({
         icon: '⚠️',
-        title: DAY_NAMES[worstIdx] + ' was the toughest night',
-        text: fmtHours(hours[worstIdx]) + ' logged, ' + fmtHours(worstDeficit) + ' under the 9h goal.'
+        title: DAY_NAMES[worst.dayIdx] + '’s ' + worst.cp.label.toLowerCase() + ' drifted most',
+        text: fmtTime12(worst.actual) + ', ' + fmtMins(Math.abs(worst.delta)) + ' ' + dir + ' than planned' + (worst.cp.key === 'napEnd' && worst.delta > 0 ? ' — cutting it close before her 4 PM meeting.' : '.')
       });
     }
 
-    var weekdayVals = [0, 1, 2, 3, 4].map(function (i) { return hours[i]; }).filter(function (h) { return h !== null; });
-    var weekendVals = [5, 6].map(function (i) { return hours[i]; }).filter(function (h) { return h !== null; });
-    if (weekdayVals.length && weekendVals.length) {
-      var wd = avg(weekdayVals), we = avg(weekendVals);
-      var diff = Math.round((wd - we) * 10) / 10;
-      if (diff >= 1) {
-        tips.push({ icon: '🌙', title: 'Weekend dip', text: 'Weekend nights are averaging ' + fmtHours(diff) + ' less than weekdays.' });
-      } else if (diff <= -1) {
-        tips.push({ icon: '🌙', title: 'Weekday dip', text: 'Weekdays are averaging ' + fmtHours(Math.abs(diff)) + ' less than weekends.' });
-      }
+    var weekdayScores = [0, 1, 2, 3, 4].map(function (i) { return computeScore(dayDeltas(days[i])); }).filter(function (s) { return s !== null; });
+    var weekendScores = [5, 6].map(function (i) { return computeScore(dayDeltas(days[i])); }).filter(function (s) { return s !== null; });
+    if (weekdayScores.length && weekendScores.length) {
+      var wd = avg(weekdayScores), we = avg(weekendScores);
+      var diff = Math.round(wd - we);
+      if (diff >= 10) tips.push({ icon: '🌙', title: 'Weekend dip', text: 'Weekend nights are scoring ' + diff + ' points lower than weekdays on average.' });
+      else if (diff <= -10) tips.push({ icon: '🌙', title: 'Weekday dip', text: 'Weekdays are scoring ' + Math.abs(diff) + ' points lower than weekends on average.' });
     }
 
-    var missing = hours.filter(function (h) { return h === null; }).length;
-    if (missing > 0) {
-      tips.push({ icon: '📝', title: 'Fill in the gaps', text: missing + (missing === 1 ? ' night' : ' nights') + ' not logged yet — log them for a fuller picture.' });
-    }
+    var missing = days.filter(function (d) { return computeScore(dayDeltas(d)) === null; }).length;
+    if (missing > 0) tips.push({ icon: '📝', title: 'Fill in the gaps', text: missing + (missing === 1 ? ' night' : ' nights') + ' not logged yet — log them for a fuller picture.' });
 
-    if (tips.length === 0) {
-      tips.push({ icon: '✅', title: 'Right on track', text: 'No major gaps this week — keep the rhythm going.' });
-    }
+    if (tips.length === 0) tips.push({ icon: '✅', title: 'Right on track', text: 'No major drift this week — the schedule is holding.' });
 
     var list = document.getElementById('tipsList');
     list.innerHTML = '';
@@ -970,11 +1077,11 @@
     document.getElementById('adjustCaption').textContent = 'For the week of ' + formatWeekLabel(state.weekStart).replace('This week · ', '');
     document.getElementById('notes').value = state.notes || '';
 
-    renderChart(state.hours);
-    var stats = weekStats(state.hours);
+    renderChart(state.days);
+    var stats = weekStats(state.days);
     renderStats(stats);
     renderTrend(stats, state.prevWeekAvg);
-    renderTips(state.hours);
+    renderTips(state.days);
   }
 
   async function refreshTrend() {
@@ -982,8 +1089,8 @@
     var ownerWeek = state.weekStart;
     var prevWeek = await loadWeek(prevWeekStart);
     if (state.weekStart !== ownerWeek) return;
-    state.prevWeekAvg = weekStats(prevWeek.hours).avgHours;
-    renderTrend(weekStats(state.hours), state.prevWeekAvg);
+    state.prevWeekAvg = weekStats(prevWeek.days).avgScore;
+    renderTrend(weekStats(state.days), state.prevWeekAvg);
   }
 
   // ---------- events ----------
@@ -1009,11 +1116,11 @@
     var loaded = await loadWeek(newWeekStart);
     if (myGen !== loadGen) return;
     state.weekStart = newWeekStart;
-    state.hours = loaded.hours;
+    state.days = loaded.days;
     state.notes = loaded.notes;
     state.prevWeekAvg = null;
     renderAll();
-    renderEntryGrid(state.weekStart, state.hours);
+    buildTable(state.weekStart);
     refreshTrend();
   }
 
@@ -1021,10 +1128,10 @@
     var myGen = ++loadGen;
     var loaded = await loadWeek(state.weekStart);
     if (myGen !== loadGen) return;
-    state.hours = loaded.hours;
+    state.days = loaded.days;
     state.notes = loaded.notes;
     renderAll();
-    renderEntryGrid(state.weekStart, state.hours);
+    buildTable(state.weekStart);
     refreshTrend();
   }
 
