@@ -1,0 +1,1264 @@
+<title>Goals Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    color-scheme: light;
+    --bg: #F5F5F7;
+    --surface: #FFFFFF;
+    --surface-soft: #F2F2F4;
+    --border: #E3E3E8;
+    --ink: #1D1D1F;
+    --ink-soft: #6E6E73;
+    --yellow: #FFC72C;
+    --yellow-deep: #F0A500;
+    --good: #2FB463;
+    --warning: #FF9F0A;
+    --critical: #FF3B30;
+    --blue: #0A84FF;
+    --shadow: rgba(28, 28, 30, 0.06);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, .num {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-inline: 16px;
+    padding-block: 20px 40px;
+  }
+
+  /* ---------- header ---------- */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, var(--yellow) 0%, var(--yellow-deep) 100%);
+    border-radius: 22px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 20px rgba(240, 165, 0, 0.25);
+    color: #3A2A0E;
+  }
+
+  .header .titles { flex: 1; min-width: 0; }
+
+  .header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
+  .header .tag {
+    margin: 2px 0 0;
+    font-size: 0.86rem;
+    font-weight: 700;
+    opacity: 0.8;
+  }
+
+  .mascot { flex-shrink: 0; }
+
+  @media (max-width: 380px) {
+    .header { padding: 16px; gap: 10px; }
+    .header h1 { font-size: 1.22rem; }
+    .mascot svg { width: 48px; height: 48px; }
+  }
+
+  /* ---------- goal strip ---------- */
+  .plan-strip {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .plan-chip {
+    flex: 1;
+    min-width: 150px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 1px 2px var(--shadow);
+  }
+
+  .plan-chip .pc-icon { font-size: 1.15rem; }
+
+  .plan-chip .pc-text { font-size: 0.78rem; font-weight: 700; color: var(--ink-soft); line-height: 1.35; }
+  .plan-chip .pc-text b { color: var(--ink); font-weight: 800; }
+
+  /* ---------- week nav ---------- */
+  .weekbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 1px 2px var(--shadow);
+  }
+
+  .weekbar button.nav {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: var(--surface-soft);
+    color: var(--ink);
+    font-size: 1.15rem;
+    font-weight: 800;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .weekbar button.nav:hover { background: var(--yellow); }
+  .weekbar button.nav:active { transform: scale(0.94); }
+
+  .weekbar .weeklabel {
+    flex: 1;
+    text-align: center;
+    font-weight: 800;
+    font-size: 0.96rem;
+    cursor: pointer;
+  }
+
+  .weekbar input[type="date"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+
+  .weekbar .today-btn {
+    border: none;
+    background: var(--surface-soft);
+    color: var(--ink-soft);
+    font-weight: 800;
+    font-size: 0.74rem;
+    border-radius: 10px;
+    padding: 10px 12px;
+    height: 40px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .weekbar .today-btn:hover { color: var(--ink); background: var(--yellow); }
+
+  @media (max-width: 360px) {
+    .weekbar .today-btn { display: none; }
+  }
+
+  /* ---------- stat cards ---------- */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  @media (max-width: 680px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 1px 2px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-card .stat-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+
+  .stat-card .stat-value {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-card .stat-caption {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- generic card ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 1px 2px var(--shadow), 0 8px 20px rgba(28,28,30,0.03);
+  }
+
+  .card h2 {
+    margin: 0 0 4px;
+    font-size: 1rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card .card-cap {
+    margin: 0 0 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- chart + gauge row ---------- */
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 680px) {
+    .chart-row { grid-template-columns: 1fr; }
+  }
+
+  .chart-card { display: flex; flex-direction: column; }
+
+  .chart-wrap {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .chart-wrap svg { display: block; width: 100%; height: auto; }
+
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 10px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    flex-wrap: wrap;
+  }
+
+  .chart-legend span { display: flex; align-items: center; gap: 6px; }
+
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .dot.good { background: var(--good); }
+  .dot.warning { background: var(--warning); }
+  .dot.critical { background: var(--critical); }
+
+  /* ---------- gauge card ---------- */
+  .gauge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .gauge-card h2 { justify-content: center; margin-bottom: 10px; }
+
+  .gauge {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: conic-gradient(var(--gauge-color, var(--yellow-deep)) calc(var(--pct, 0) * 1%), var(--surface-soft) 0);
+    position: relative;
+    margin: 4px 0 10px;
+  }
+  .gauge::before {
+    content: "";
+    position: absolute;
+    inset: 11px;
+    background: var(--surface);
+    border-radius: 50%;
+  }
+  .gauge span {
+    position: relative;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+
+  .gauge-cap {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- entry table ---------- */
+  .table-wrap {
+    overflow-x: auto;
+    margin-top: 4px;
+    border-radius: 12px;
+  }
+
+  .entry-table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 640px;
+  }
+
+  .entry-table th, .entry-table td {
+    padding: 8px 6px;
+    text-align: center;
+  }
+
+  .entry-table thead th {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding-bottom: 6px;
+  }
+
+  .entry-table thead th .th-date { display: block; font-size: 0.62rem; font-weight: 600; text-transform: none; margin-top: 1px; }
+
+  .entry-table tbody th {
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--ink);
+    white-space: nowrap;
+    position: sticky;
+    left: 0;
+    background: var(--surface);
+    padding-right: 10px;
+  }
+
+  .entry-table tbody th .row-goal {
+    display: block;
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-top: 1px;
+  }
+
+  .entry-table tbody tr + tr th,
+  .entry-table tbody tr + tr td { border-top: 1px solid var(--border); }
+
+  .entry-table tbody tr.money-row th,
+  .entry-table tbody tr.money-row td { border-top: 2px solid var(--yellow); }
+
+  .entry-table input[type="number"] {
+    width: 100%;
+    min-width: 58px;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 7px 4px;
+    text-align: center;
+  }
+  .entry-table input[type="number"]:focus {
+    outline: none;
+    border-color: var(--yellow-deep);
+    background: var(--surface);
+  }
+  .entry-table input[type="number"]:disabled {
+    background: transparent;
+    border-color: transparent;
+    color: var(--border);
+  }
+
+  .entry-table input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--good);
+    cursor: pointer;
+  }
+
+  .goal-met { background: rgba(47, 180, 99, 0.1) !important; }
+
+  /* ---------- insight cards ---------- */
+  .insight-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 680px) {
+    .insight-row { grid-template-columns: 1fr; }
+  }
+
+  .insight-card p {
+    margin: 6px 0 0;
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .tip-row {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+  }
+  .tip-row + .tip-row { border-top: 1px solid var(--border); }
+
+  .tip-row .tip-icon { font-size: 1rem; flex-shrink: 0; }
+
+  .tip-row .tip-title {
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: var(--ink);
+    display: block;
+  }
+
+  .tip-row .tip-text {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    display: block;
+    margin-top: 1px;
+  }
+
+  /* ---------- money card ---------- */
+  .money-days {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .money-day {
+    flex: 1;
+    border-radius: 14px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    padding: 12px 8px;
+    text-align: center;
+  }
+
+  .money-day.met {
+    background: rgba(47, 180, 99, 0.12);
+    border-color: var(--good);
+  }
+
+  .money-day .md-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  .money-day .md-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+
+  .money-day .md-cap {
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  /* ---------- adjustments ---------- */
+  .adjust-cap {
+    margin: 0 0 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .adjust textarea {
+    width: 100%;
+    min-height: 92px;
+    resize: vertical;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    background: var(--surface-soft);
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .adjust .adjust-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .adjust .saved-msg {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--good);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .adjust .saved-msg.show { opacity: 1; }
+
+  .save-btn {
+    border: none;
+    background: var(--ink);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    padding: 12px 20px;
+    min-height: 44px;
+    cursor: pointer;
+  }
+  .save-btn:hover { background: #000; }
+  .save-btn:active { transform: scale(0.98); }
+
+  .footnote {
+    text-align: center;
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+</style>
+
+<div class="page">
+
+  <div class="header">
+    <div class="mascot">
+      <svg width="64" height="64" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <radialGradient id="headGrad2" cx="33%" cy="26%" r="80%">
+            <stop offset="0%" stop-color="#FFE49A"/>
+            <stop offset="100%" stop-color="#FFC72C"/>
+          </radialGradient>
+          <radialGradient id="blushGrad2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FF7E5F" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#FF7E5F" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <path d="M30 26 C22 13 17 6 14 2 C15 12 18 22 25 31 Z" fill="#3A2A0E"/>
+        <path d="M30 28 C24 18 21 10 19 6 C20 14 22 22 26 29 Z" fill="#FFC72C"/>
+        <path d="M72 24 C80 12 85 5 88 1 C87 11 84 21 77 30 Z" fill="#3A2A0E"/>
+        <path d="M72 26 C78 16 81 9 83 5 C82 13 80 21 76 28 Z" fill="#FFC72C"/>
+        <circle cx="51" cy="55" r="33" fill="url(#headGrad2)"/>
+        <circle cx="24" cy="60" r="11" fill="url(#blushGrad2)"/>
+        <circle cx="78" cy="60" r="11" fill="url(#blushGrad2)"/>
+        <circle cx="24" cy="60" r="7" fill="#F4795A" opacity="0.75"/>
+        <circle cx="78" cy="60" r="7" fill="#F4795A" opacity="0.75"/>
+        <circle cx="40" cy="52" r="3.4" fill="#2E2013"/>
+        <circle cx="62" cy="52" r="3.4" fill="#2E2013"/>
+        <path d="M44 66 Q51 72 58 66" stroke="#2E2013" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M22 30 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6 Z" fill="#FFF3D3"/>
+      </svg>
+    </div>
+    <div class="titles">
+      <h1>Goals Dashboard</h1>
+      <p class="tag">Health &amp; money, kasama si Pikachu ⚡</p>
+    </div>
+  </div>
+
+  <div class="plan-strip">
+    <div class="plan-chip">
+      <span class="pc-icon">🔥</span>
+      <span class="pc-text">Calories<br><b>1500 cal</b></span>
+    </div>
+    <div class="plan-chip">
+      <span class="pc-icon">🚶</span>
+      <span class="pc-text">Steps<br><b>3000 steps</b></span>
+    </div>
+    <div class="plan-chip">
+      <span class="pc-icon">🍗</span>
+      <span class="pc-text">Protein<br><b>80g</b></span>
+    </div>
+    <div class="plan-chip">
+      <span class="pc-icon">🏋️</span>
+      <span class="pc-text">Gym<br><b>1 session/day</b></span>
+    </div>
+    <div class="plan-chip">
+      <span class="pc-icon">💰</span>
+      <span class="pc-text">Talk to people<br><b>3 connected</b> · Fri, Sat, Sun</span>
+    </div>
+  </div>
+
+  <div class="weekbar">
+    <button class="nav" id="prevWeek" aria-label="Previous week">‹</button>
+    <div class="weeklabel" id="weekLabel">This week</div>
+    <button class="nav" id="nextWeek" aria-label="Next week">›</button>
+    <button class="today-btn" id="jumpWeek">This week</button>
+    <input type="date" id="weekPicker">
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-top"><span>📅</span><span>Days logged</span></div>
+      <div class="stat-value" id="statDays">0/7</div>
+      <div class="stat-caption">this week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>✅</span><span>Health goals hit</span></div>
+      <div class="stat-value" id="statScore">--</div>
+      <div class="stat-caption">avg out of 4 per day</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>🚶</span><span>Total steps</span></div>
+      <div class="stat-value" id="statSteps">0</div>
+      <div class="stat-caption" id="statStepsCap">of 21,000 goal</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>💰</span><span>Connected days</span></div>
+      <div class="stat-value" id="statMoney">0/3</div>
+      <div class="stat-caption">Fri, Sat, Sun · 3+ people</div>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="card chart-card">
+      <h2>Health goals hit, per day</h2>
+      <p class="card-cap">Out of 4: calories, steps, protein, gym</p>
+      <div class="chart-wrap">
+        <svg id="chartSvg" viewBox="0 0 700 220" preserveAspectRatio="none" aria-hidden="true"></svg>
+      </div>
+      <div class="chart-legend">
+        <span><i class="dot good"></i> All 4 (4/4)</span>
+        <span><i class="dot warning"></i> Some (2-3/4)</span>
+        <span><i class="dot critical"></i> Few (0-1/4)</span>
+      </div>
+    </div>
+
+    <div class="card gauge-card">
+      <h2>Week completion</h2>
+      <div class="gauge" id="gaugeRing" style="--pct:0;">
+        <span id="gaugeValue">--</span>
+      </div>
+      <p class="gauge-cap" id="gaugeCaption">Log a few days to see this.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Log your day</h2>
+    <p class="card-cap">Calories, steps, protein and gym daily · people talked to on Fri/Sat/Sun</p>
+    <div class="table-wrap">
+      <table class="entry-table">
+        <thead>
+          <tr id="tableHead"><th></th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💰 Money goal · talk to 3 people</h2>
+    <p class="card-cap">Connected conversations on Friday, Saturday, Sunday</p>
+    <div class="money-days" id="moneyDays"></div>
+  </div>
+
+  <div class="insight-row">
+    <div class="card insight-card">
+      <h2>📈 This week's trend</h2>
+      <p id="trendText">Log a few days to see your trend.</p>
+    </div>
+    <div class="card insight-card">
+      <h2>💡 What to work on</h2>
+      <div id="tipsList"></div>
+    </div>
+  </div>
+
+  <div class="card adjust">
+    <h2>Notes</h2>
+    <p class="adjust-cap" id="adjustCaption">For this week</p>
+    <textarea id="notes" placeholder="e.g. protein is the hardest one, prep more chicken on Sundays..."></textarea>
+    <div class="adjust-foot">
+      <span class="saved-msg" id="savedMsg">Saved ⚡</span>
+      <button class="save-btn" id="saveNotes">Save note</button>
+    </div>
+  </div>
+
+  <p class="footnote" id="storageNote">Loading...</p>
+
+</div>
+
+<script>
+(function () {
+  var GOALS = {
+    calories: 1500,
+    steps: 3000,
+    protein: 80,
+    moneyPeople: 3
+  };
+  var DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var MONEY_DAY_IDXS = [4, 5, 6]; // Fri, Sat, Sun
+  var METRICS = [
+    { key: 'calories', label: 'Calories', unit: 'cal', goal: GOALS.calories, type: 'target' },
+    { key: 'steps', label: 'Steps', unit: '', goal: GOALS.steps, type: 'min' },
+    { key: 'protein', label: 'Protein', unit: 'g', goal: GOALS.protein, type: 'min' },
+    { key: 'gym', label: 'Gym', unit: '', goal: 1, type: 'bool' }
+  ];
+  var LS_DAYS_KEY = 'pika-goals-days-v1';
+  var LS_WEEKS_KEY = 'pika-goals-weeks-v1';
+
+  var db = null;
+  var dbChecked = false;
+  var loadGen = 0;
+
+  var state = {
+    weekStart: mondayOf(todayStr()),
+    days: emptyWeekDays(),
+    notes: '',
+    prevWeekAvg: null
+  };
+
+  function emptyWeekDays() {
+    var out = [];
+    for (var i = 0; i < 7; i++) out.push({ calories: '', steps: '', protein: '', gym: false, peopleConnected: '' });
+    return out;
+  }
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+
+  function addDays(dateStr, n) {
+    var p = dateStr.split('-').map(Number);
+    var d = new Date(p[0], p[1] - 1, p[2]);
+    d.setDate(d.getDate() + n);
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+
+  function mondayOf(dateStr) {
+    var p = dateStr.split('-').map(Number);
+    var d = new Date(p[0], p[1] - 1, p[2]);
+    var offset = (d.getDay() + 6) % 7;
+    d.setDate(d.getDate() - offset);
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+
+  function weekDates(weekStart) {
+    var out = [];
+    for (var i = 0; i < 7; i++) out.push(addDays(weekStart, i));
+    return out;
+  }
+
+  function shortDate(dateStr) {
+    var p = dateStr.split('-').map(Number);
+    var d = new Date(p[0], p[1] - 1, p[2]);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  function dayNum(dateStr) { return Number(dateStr.split('-')[2]); }
+
+  function formatWeekLabel(weekStart) {
+    var label = shortDate(weekStart) + ' – ' + shortDate(addDays(weekStart, 6));
+    return weekStart === mondayOf(todayStr()) ? 'This week · ' + label : label;
+  }
+
+  function avg(arr) {
+    if (arr.length === 0) return null;
+    return arr.reduce(function (a, b) { return a + b; }, 0) / arr.length;
+  }
+
+  function numOrNull(v) {
+    if (v === '' || v === null || v === undefined) return null;
+    var n = Number(v);
+    return isNaN(n) ? null : n;
+  }
+
+  // ---------- scoring ----------
+
+  function metricMet(metric, day) {
+    if (metric.key === 'gym') return !!day.gym;
+    var v = numOrNull(day[metric.key]);
+    if (v === null) return null;
+    if (metric.type === 'min') return v >= metric.goal;
+    if (metric.type === 'target') return Math.abs(v - metric.goal) <= metric.goal * 0.1;
+    return null;
+  }
+
+  function healthLogged(day) {
+    return numOrNull(day.calories) !== null || numOrNull(day.steps) !== null ||
+      numOrNull(day.protein) !== null || !!day.gym;
+  }
+
+  function metricEntered(metric, day) {
+    if (metric.key === 'gym') return healthLogged(day); // only counts once health has some data
+    return numOrNull(day[metric.key]) !== null;
+  }
+
+  function dayHealthScore(day) {
+    var entered = METRICS.filter(function (m) { return metricEntered(m, day); });
+    if (entered.length === 0) return null;
+    var hit = entered.filter(function (m) { return metricMet(m, day); }).length;
+    // scale to out-of-4 even if not all fields entered, so bars stay comparable
+    return Math.round((hit / entered.length) * 4 * 10) / 10;
+  }
+
+  function dayIsLogged(day) {
+    return healthLogged(day) || numOrNull(day.peopleConnected) !== null;
+  }
+
+  function scoreTier4(score) {
+    if (score === null) return { color: 'var(--border)' };
+    if (score >= 3.5) return { color: 'var(--good)' };
+    if (score >= 2) return { color: 'var(--warning)' };
+    return { color: 'var(--critical)' };
+  }
+
+  function moneyMet(day) {
+    var v = numOrNull(day.peopleConnected);
+    if (v === null) return null;
+    return v >= GOALS.moneyPeople;
+  }
+
+  // ---------- storage ----------
+
+  async function getDb() {
+    if (dbChecked) return db;
+    dbChecked = true;
+    try {
+      if (window.claude && typeof window.claude.use === 'function') {
+        db = await window.claude.use('db');
+      }
+    } catch (e) { db = null; }
+    document.getElementById('storageNote').textContent = db
+      ? 'Synced ⚡ your entries are saved automatically'
+      : 'Saved on this device only';
+    return db;
+  }
+
+  function readLocalDay(date) {
+    try {
+      var all = JSON.parse(localStorage.getItem(LS_DAYS_KEY) || '{}');
+      return all[date] || null;
+    } catch (e) { return null; }
+  }
+
+  function writeLocalDay(date, day) {
+    try {
+      var all = JSON.parse(localStorage.getItem(LS_DAYS_KEY) || '{}');
+      all[date] = day;
+      localStorage.setItem(LS_DAYS_KEY, JSON.stringify(all));
+    } catch (e) {}
+  }
+
+  function readLocalWeek(weekStart) {
+    try {
+      var all = JSON.parse(localStorage.getItem(LS_WEEKS_KEY) || '{}');
+      var w = all[weekStart];
+      return w && typeof w.notes === 'string' ? w.notes : '';
+    } catch (e) { return ''; }
+  }
+
+  function writeLocalWeek(weekStart, notes) {
+    try {
+      var all = JSON.parse(localStorage.getItem(LS_WEEKS_KEY) || '{}');
+      all[weekStart] = { notes: notes };
+      localStorage.setItem(LS_WEEKS_KEY, JSON.stringify(all));
+    } catch (e) {}
+  }
+
+  function normalizeDay(d) {
+    d = d || {};
+    return {
+      calories: d.calories === 0 ? 0 : (d.calories || ''),
+      steps: d.steps === 0 ? 0 : (d.steps || ''),
+      protein: d.protein === 0 ? 0 : (d.protein || ''),
+      gym: !!d.gym,
+      peopleConnected: d.peopleConnected === 0 ? 0 : (d.peopleConnected || '')
+    };
+  }
+
+  async function loadDay(date) {
+    var database = await getDb();
+    if (database) {
+      try {
+        var snap = await database.doc('goaldays/' + date).get();
+        return snap.exists ? normalizeDay(snap.data()) : normalizeDay(null);
+      } catch (e) {
+        return normalizeDay(readLocalDay(date));
+      }
+    }
+    return normalizeDay(readLocalDay(date));
+  }
+
+  async function saveDay(date, day) {
+    var database = await getDb();
+    if (database) {
+      try { await database.doc('goaldays/' + date).set(day); return; } catch (e) {}
+    }
+    writeLocalDay(date, day);
+  }
+
+  async function loadWeekNotes(weekStart) {
+    var database = await getDb();
+    if (database) {
+      try {
+        var snap = await database.doc('goalweeks/' + weekStart).get();
+        return snap.exists && typeof snap.data().notes === 'string' ? snap.data().notes : '';
+      } catch (e) { return readLocalWeek(weekStart); }
+    }
+    return readLocalWeek(weekStart);
+  }
+
+  async function saveWeekNotes(weekStart, notes) {
+    var database = await getDb();
+    if (database) {
+      try { await database.doc('goalweeks/' + weekStart).set({ notes: notes }); return; } catch (e) {}
+    }
+    writeLocalWeek(weekStart, notes);
+  }
+
+  async function loadWeek(weekStart) {
+    var dates = weekDates(weekStart);
+    var days = await Promise.all(dates.map(loadDay));
+    var notes = await loadWeekNotes(weekStart);
+    return { days: days, notes: notes };
+  }
+
+  // ---------- stats ----------
+
+  function weekStats(days) {
+    var scores = days.map(dayHealthScore);
+    var loggedScores = scores.filter(function (s) { return s !== null; });
+    var loggedDays = days.filter(dayIsLogged).length;
+    var steps = days.map(function (d) { return numOrNull(d.steps); }).filter(function (s) { return s !== null; });
+    var totalSteps = steps.reduce(function (a, b) { return a + b; }, 0);
+    var moneyDays = MONEY_DAY_IDXS.filter(function (i) { return moneyMet(days[i]); }).length;
+    return {
+      scores: scores,
+      daysLogged: loggedDays,
+      avgScore: loggedScores.length ? Math.round(avg(loggedScores) * 10) / 10 : null,
+      totalSteps: totalSteps,
+      moneyDays: moneyDays
+    };
+  }
+
+  // ---------- chart ----------
+
+  function renderChart(days) {
+    var W = 700, H = 220, BASE_Y = 190, TOP_PAD = 26, COL_W = W / 7, BAR_W = 34;
+    var plotH = BASE_Y - TOP_PAD;
+    function scaleScore(s) { return (s / 4) * plotH; }
+
+    var svg = '';
+    svg += '<line x1="0" y1="' + BASE_Y + '" x2="' + W + '" y2="' + BASE_Y + '" stroke="var(--border)" stroke-width="1.5"/>';
+
+    [2, 4].forEach(function (v) {
+      var gy = BASE_Y - scaleScore(v);
+      var isGoal = v === 4;
+      svg += '<line x1="0" y1="' + gy + '" x2="' + W + '" y2="' + gy + '" stroke="' + (isGoal ? 'var(--yellow-deep)' : 'var(--border)') + '" stroke-width="' + (isGoal ? 1.6 : 1) + '" stroke-dasharray="' + (isGoal ? '5,4' : '2,4') + '" opacity="0.85"/>';
+      svg += '<text x="' + (W - 4) + '" y="' + (gy - 5) + '" text-anchor="end" font-size="11" font-weight="700" fill="' + (isGoal ? 'var(--yellow-deep)' : 'var(--ink-soft)') + '" font-family="Inter Tight, sans-serif">' + (isGoal ? 'All 4' : v) + '</text>';
+    });
+
+    days.forEach(function (day, i) {
+      var cx = i * COL_W + COL_W / 2;
+      var score = dayHealthScore(day);
+      if (score === null) {
+        svg += '<rect x="' + (cx - 7) + '" y="' + (BASE_Y - 4) + '" width="14" height="4" rx="2" fill="var(--border)"/>';
+        return;
+      }
+      var tier = scoreTier4(score);
+      var h = scaleScore(score), y = BASE_Y - h;
+      svg += '<rect x="' + (cx - BAR_W / 2) + '" y="' + y + '" width="' + BAR_W + '" height="' + h + '" rx="7" fill="' + tier.color + '"/>';
+      svg += '<text x="' + cx + '" y="' + (y - 6) + '" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)" font-family="Inter Tight, sans-serif">' + score + '</text>';
+    });
+
+    document.getElementById('chartSvg').innerHTML = svg;
+  }
+
+  // ---------- entry table ----------
+
+  function buildTable(weekStart) {
+    var dates = weekDates(weekStart);
+    var head = document.getElementById('tableHead');
+    head.innerHTML = '<th></th>';
+    dates.forEach(function (date, i) {
+      var th = document.createElement('th');
+      th.innerHTML = DAY_NAMES[i] + '<span class="th-date">' + dayNum(date) + '</span>';
+      head.appendChild(th);
+    });
+
+    var body = document.getElementById('tableBody');
+    body.innerHTML = '';
+
+    METRICS.forEach(function (metric) {
+      var row = document.createElement('tr');
+      var rowLabel = document.createElement('th');
+      var goalText = metric.key === 'gym' ? '1x/day' : (metric.type === 'min' ? '≥ ' + metric.goal + metric.unit : '~' + metric.goal + metric.unit);
+      rowLabel.innerHTML = metric.label + '<span class="row-goal">' + goalText + '</span>';
+      row.appendChild(rowLabel);
+
+      dates.forEach(function (date, i) {
+        var td = document.createElement('td');
+        if (metric.key === 'gym') {
+          var cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.checked = !!state.days[i].gym;
+          cb.setAttribute('aria-label', 'Gym ' + DAY_NAMES[i]);
+          cb.addEventListener('change', function () {
+            var ownerWeek = weekStart;
+            state.days[i].gym = this.checked;
+            renderAll();
+            if (state.weekStart === ownerWeek) saveDay(date, state.days[i]);
+          });
+          td.appendChild(cb);
+        } else {
+          var input = document.createElement('input');
+          input.type = 'number';
+          input.min = '0';
+          input.value = state.days[i][metric.key];
+          input.setAttribute('aria-label', metric.label + ' ' + DAY_NAMES[i]);
+          input.addEventListener('change', function () {
+            var ownerWeek = weekStart;
+            state.days[i][metric.key] = this.value === '' ? '' : Number(this.value);
+            renderAll();
+            if (state.weekStart === ownerWeek) saveDay(date, state.days[i]);
+          });
+          if (metricMet(metric, state.days[i])) td.classList.add('goal-met');
+          td.appendChild(input);
+        }
+        row.appendChild(td);
+      });
+      body.appendChild(row);
+    });
+
+    // money row
+    var moneyRow = document.createElement('tr');
+    moneyRow.className = 'money-row';
+    var moneyLabel = document.createElement('th');
+    moneyLabel.innerHTML = 'People talked to<span class="row-goal">≥ 3, Fri–Sun</span>';
+    moneyRow.appendChild(moneyLabel);
+    dates.forEach(function (date, i) {
+      var td = document.createElement('td');
+      var isMoneyDay = MONEY_DAY_IDXS.indexOf(i) !== -1;
+      var input = document.createElement('input');
+      input.type = 'number';
+      input.min = '0';
+      input.disabled = !isMoneyDay;
+      input.value = isMoneyDay ? state.days[i].peopleConnected : '';
+      input.placeholder = isMoneyDay ? '' : '–';
+      input.setAttribute('aria-label', 'People talked to ' + DAY_NAMES[i]);
+      input.addEventListener('change', function () {
+        var ownerWeek = weekStart;
+        state.days[i].peopleConnected = this.value === '' ? '' : Number(this.value);
+        renderAll();
+        if (state.weekStart === ownerWeek) saveDay(date, state.days[i]);
+      });
+      if (isMoneyDay && moneyMet(state.days[i])) td.classList.add('goal-met');
+      td.appendChild(input);
+      moneyRow.appendChild(td);
+    });
+    body.appendChild(moneyRow);
+  }
+
+  // ---------- stats + gauge ----------
+
+  function renderStats(stats) {
+    document.getElementById('statDays').textContent = stats.daysLogged + '/7';
+    document.getElementById('statScore').textContent = stats.avgScore === null ? '--' : stats.avgScore + '/4';
+    document.getElementById('statSteps').textContent = stats.totalSteps.toLocaleString();
+    document.getElementById('statStepsCap').textContent = 'of ' + (GOALS.steps * 7).toLocaleString() + ' goal';
+    document.getElementById('statMoney').textContent = stats.moneyDays + '/3';
+
+    var pct = stats.daysLogged ? Math.round((stats.avgScore / 4) * 100) : 0;
+    var ring = document.getElementById('gaugeRing');
+    var val = document.getElementById('gaugeValue');
+    var cap = document.getElementById('gaugeCaption');
+
+    if (stats.daysLogged === 0) {
+      ring.style.setProperty('--pct', 0);
+      ring.style.setProperty('--gauge-color', 'var(--border)');
+      val.textContent = '--';
+      cap.textContent = 'Log a few days to see this.';
+      return;
+    }
+
+    var color = 'var(--critical)';
+    if (pct >= 75) color = 'var(--good)';
+    else if (pct >= 45) color = 'var(--warning)';
+
+    ring.style.setProperty('--pct', pct);
+    ring.style.setProperty('--gauge-color', color);
+    val.textContent = pct + '%';
+    cap.textContent = 'avg ' + stats.avgScore + ' of 4 health goals hit, across ' + stats.daysLogged + ' logged ' + (stats.daysLogged === 1 ? 'day' : 'days');
+  }
+
+  function renderMoneyDays(days) {
+    var wrap = document.getElementById('moneyDays');
+    wrap.innerHTML = '';
+    MONEY_DAY_IDXS.forEach(function (i) {
+      var day = days[i];
+      var v = numOrNull(day.peopleConnected);
+      var met = moneyMet(day);
+      var el = document.createElement('div');
+      el.className = 'money-day' + (met ? ' met' : '');
+      el.innerHTML = '<div class="md-label">' + DAY_NAMES[i] + '</div>' +
+        '<div class="md-value">' + (v === null ? '--' : v) + '</div>' +
+        '<div class="md-cap">' + (met === null ? 'not logged' : (met ? 'connected ✓' : 'of 3 goal')) + '</div>';
+      wrap.appendChild(el);
+    });
+  }
+
+  // ---------- insights ----------
+
+  function renderTrend(stats, prevAvg) {
+    var el = document.getElementById('trendText');
+    if (stats.avgScore === null) { el.textContent = 'Log a few days to see your trend.'; return; }
+    if (prevAvg === null) {
+      el.textContent = 'Averaging ' + stats.avgScore + ' of 4 health goals across ' + stats.daysLogged + (stats.daysLogged === 1 ? ' day' : ' days') + ' logged this week.';
+      return;
+    }
+    var diff = Math.round((stats.avgScore - prevAvg) * 10) / 10;
+    if (Math.abs(diff) < 0.2) {
+      el.textContent = 'Averaging ' + stats.avgScore + ' of 4, about the same as last week.';
+    } else if (diff > 0) {
+      el.textContent = 'Averaging ' + stats.avgScore + ' of 4, up ' + diff + ' from last week — good progress.';
+    } else {
+      el.textContent = 'Averaging ' + stats.avgScore + ' of 4, down ' + Math.abs(diff) + ' from last week.';
+    }
+  }
+
+  function renderTips(days) {
+    var tips = [];
+
+    var missCounts = {};
+    METRICS.forEach(function (m) { missCounts[m.key] = 0; });
+    days.forEach(function (day) {
+      METRICS.forEach(function (m) {
+        if (metricEntered(m, day) && metricMet(m, day) === false) missCounts[m.key]++;
+      });
+    });
+    var worstKey = null, worstCount = 0;
+    METRICS.forEach(function (m) {
+      if (missCounts[m.key] > worstCount) { worstCount = missCounts[m.key]; worstKey = m.key; }
+    });
+    if (worstKey && worstCount >= 2) {
+      var m = METRICS.filter(function (x) { return x.key === worstKey; })[0];
+      tips.push({ icon: '⚠️', title: m.label + ' is the toughest one', text: 'Missed on ' + worstCount + ' logged days this week.' });
+    }
+
+    var moneyLoggedDays = MONEY_DAY_IDXS.filter(function (i) { return numOrNull(days[i].peopleConnected) !== null; });
+    var moneyMissed = moneyLoggedDays.filter(function (i) { return !moneyMet(days[i]); });
+    if (moneyMissed.length > 0) {
+      tips.push({ icon: '💰', title: 'Money goal slipping', text: moneyMissed.length + ' of ' + moneyLoggedDays.length + ' logged Fri/Sat/Sun days fell short of 3 connected conversations.' });
+    }
+
+    var missing = days.filter(function (d) { return !dayIsLogged(d); }).length;
+    if (missing > 0) tips.push({ icon: '📝', title: 'Fill in the gaps', text: missing + (missing === 1 ? ' day' : ' days') + ' not logged yet — log them for a fuller picture.' });
+
+    if (tips.length === 0) tips.push({ icon: '✅', title: 'Right on track', text: 'All goals holding steady this week — keep it up.' });
+
+    var list = document.getElementById('tipsList');
+    list.innerHTML = '';
+    tips.slice(0, 3).forEach(function (t) {
+      var row = document.createElement('div');
+      row.className = 'tip-row';
+      row.innerHTML = '<span class="tip-icon">' + t.icon + '</span>' +
+        '<span><span class="tip-title">' + t.title + '</span><span class="tip-text">' + t.text + '</span></span>';
+      list.appendChild(row);
+    });
+  }
+
+  // ---------- top-level render ----------
+
+  function renderAll() {
+    document.getElementById('weekLabel').textContent = formatWeekLabel(state.weekStart);
+    document.getElementById('weekPicker').value = state.weekStart;
+    document.getElementById('adjustCaption').textContent = 'For the week of ' + formatWeekLabel(state.weekStart).replace('This week · ', '');
+    document.getElementById('notes').value = state.notes || '';
+
+    renderChart(state.days);
+    var stats = weekStats(state.days);
+    renderStats(stats);
+    renderMoneyDays(state.days);
+    renderTrend(stats, state.prevWeekAvg);
+    renderTips(state.days);
+  }
+
+  async function refreshTrend() {
+    var prevWeekStart = addDays(state.weekStart, -7);
+    var ownerWeek = state.weekStart;
+    var prevWeek = await loadWeek(prevWeekStart);
+    if (state.weekStart !== ownerWeek) return;
+    state.prevWeekAvg = weekStats(prevWeek.days).avgScore;
+    renderTrend(weekStats(state.days), state.prevWeekAvg);
+  }
+
+  // ---------- events ----------
+
+  document.getElementById('saveNotes').addEventListener('click', function () {
+    state.notes = document.getElementById('notes').value;
+    saveWeekNotes(state.weekStart, state.notes);
+    var msg = document.getElementById('savedMsg');
+    msg.classList.add('show');
+    setTimeout(function () { msg.classList.remove('show'); }, 1800);
+  });
+
+  document.getElementById('prevWeek').addEventListener('click', function () { goToWeek(addDays(state.weekStart, -7)); });
+  document.getElementById('nextWeek').addEventListener('click', function () { goToWeek(addDays(state.weekStart, 7)); });
+  document.getElementById('jumpWeek').addEventListener('click', function () { goToWeek(mondayOf(todayStr())); });
+  document.getElementById('weekLabel').addEventListener('click', function () { document.getElementById('weekPicker').showPicker && document.getElementById('weekPicker').showPicker(); });
+  document.getElementById('weekPicker').addEventListener('change', function () {
+    if (this.value) goToWeek(mondayOf(this.value));
+  });
+
+  async function goToWeek(newWeekStart) {
+    var myGen = ++loadGen;
+    var loaded = await loadWeek(newWeekStart);
+    if (myGen !== loadGen) return;
+    state.weekStart = newWeekStart;
+    state.days = loaded.days;
+    state.notes = loaded.notes;
+    state.prevWeekAvg = null;
+    renderAll();
+    buildTable(state.weekStart);
+    refreshTrend();
+  }
+
+  async function boot() {
+    var myGen = ++loadGen;
+    var loaded = await loadWeek(state.weekStart);
+    if (myGen !== loadGen) return;
+    state.days = loaded.days;
+    state.notes = loaded.notes;
+    renderAll();
+    buildTable(state.weekStart);
+    refreshTrend();
+  }
+
+  boot();
+})();
+</script>
